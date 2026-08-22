@@ -2132,6 +2132,14 @@
             ['p-title','p-content'].forEach(i=>document.getElementById(i).value='');
             document.getElementById('p-label').value='Komunikat';
         }
+
+        // Ładuj ekran Start od razu po uruchomieniu aplikacji.
+        // Nie zmienia to działania funkcji — tylko wywołuje istniejące ładowanie
+        // równolegle bez konieczności przechodzenia do innej zakładki.
+        window.addEventListener('DOMContentLoaded', () => {
+            refreshMatches();
+            loadHomeTable();
+        });
         
     </script>
 </body>
