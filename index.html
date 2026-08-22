@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0e1726">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Strefa Gola - Podkarpacie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --navy:#0b162c; --green:#7ed321; --green-glow:rgba(126,211,33,0.25);
+            --gold:#f5a623; --white:#fff; --muted:#8b9bb4; --border:rgba(255,255,255,0.08);
+            --glass:rgba(19,34,64,0.65); --radius:18px; --ease:cubic-bezier(0.16,1,0.3,1);
+            --promo:rgba(126,211,33,0.12); --promo-border:#7ed321;
+            --releg:rgba(239,68,68,0.12); --releg-border:#ef4444;
+            --barage:rgba(245,166,35,0.12); --barage-border:#f5a623;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+        body{
+            background-color:var(--navy);
+            background-image:
+                radial-gradient(circle at 10% 5%, rgba(126,211,33,0.07) 0%, transparent 35%),
+                radial-gradient(circle at 90% 95%, rgba(245,166,35,0.05) 0%, transparent 35%),
+                repeating-linear-gradient(90deg, transparent, transparent 120px, rgba(255,255,255,0.012) 120px, rgba(255,255,255,0.012) 240px);
+            color:var(--white); font-family:'Inter',sans-serif; line-height:1.6; min-height:100vh;
+        }
+        h1,h2,h3,.logo-text{font-family:'Outfit',sans-serif;letter-spacing:-0.02em;}
+        button{cursor:pointer;border:none;background:none;font-family:inherit;color:inherit;}
+        input,select,textarea{font-family:inherit;}
+        
+        @keyframes fadeUp{from{opacity:0;transform:translate3d(0, 20px, 0)}to{opacity:1;transform:translate3d(0, 0, 0)}}
+        .anim{animation:fadeUp .6s var(--ease) forwards;opacity:0;will-change:transform, opacity;}
+        .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}
+
+        nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(11,22,44,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 4%;}
+        .logo-wrap{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+        .logo-img{height:46px;width:auto;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));}
+        .logo-text{font-size:1.1rem;font-weight:800;text-transform:uppercase;white-space:nowrap;}
+        .logo-text span{color:var(--green);}
+        .logo-sub{font-size:0.58rem;color:var(--muted);font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;margin-top:-3px;}
+        .tabs{display:flex;gap:0.25rem;overflow-x:auto;scrollbar-width:none;max-width:75%;justify-content:flex-end;padding:4px 0;}
+        .tabs::-webkit-scrollbar{display:none;}
+        .tab{padding:0.55rem 0.8rem;border-radius:10px;font-size:0.75rem;font-weight:600;color:var(--muted);transition:all .25s var(--ease);white-space:nowrap;flex-shrink:0;}
+        .tab:hover{color:var(--white);background:rgba(255,255,255,0.05);}
+        .tab.active{color:var(--navy);background:var(--green);box-shadow:0 0 20px var(--green-glow);}
+
+        main{max-width:1160px;margin:105px auto 0;padding:0 1.5rem 3rem;min-height:80vh;}
+        .section{display:none;}.section.active{display:block;}
+
+        .sub-nav-container{margin-bottom:2.2rem;}
+        .group-toggle{display:flex;gap:8px;margin-bottom:0.8rem;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+        .group-toggle::-webkit-scrollbar{display:none;}
+        .grp-tab{padding:0.4rem 0.9rem;border-radius:8px;font-size:0.75rem;font-weight:700;color:var(--muted);background:rgba(255,255,255,0.05);border:1px solid var(--border);transition:all .2s var(--ease);white-space:nowrap;cursor:pointer;}
+        .grp-tab:hover{color:var(--white);background:rgba(255,255,255,0.1);}
+        .grp-tab.active{color:var(--navy);background:var(--green);border-color:var(--green);box-shadow:0 0 12px var(--green-glow);}
+
+        .sub-nav{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+        .sub-nav::-webkit-scrollbar{display:none;}
+        .sub-tab{padding:0.9rem 1.4rem;font-size:0.8rem;font-weight:600;color:var(--muted);position:relative;white-space:nowrap;flex-shrink:0;}
+        .sub-tab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:3px;background:var(--green);transform:scaleX(0);transition:transform .3s var(--ease);box-shadow:0 0 14px var(--green-glow);}
+        .sub-tab:hover{color:var(--white);}
+        .sub-tab.active{color:var(--green);}
+        .sub-tab.active::after{transform:scaleX(1);}
+
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.4rem;}
+        .card{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem;transition:all .35s var(--ease);position:relative;overflow:hidden;}
+        .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--gold));opacity:0;transition:opacity .35s;}
+        .card:hover{border-color:rgba(126,211,33,0.35);transform:translateY(-3px);box-shadow:0 14px 40px rgba(0,0,0,0.3);}
+        .card:hover::before{opacity:1;}
+        .league-label{font-size:0.58rem;text-transform:uppercase;letter-spacing:1.8px;font-weight:700;color:var(--green);margin-bottom:1.2rem;display:flex;align-items:center;gap:8px;}
+        .league-label i{font-size:0.42rem;}
+        .badge-up{margin-left:auto;color:var(--gold);letter-spacing:0.8px;}
+
+        .match-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;}
+        .team-wrap{display:flex;align-items:center;gap:10px;width:39%;min-width:0;}
+        .team-wrap.away{flex-direction:row-reverse;text-align:right;}
+        .team-crest{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.08);object-fit:contain;border:1px solid var(--border);flex-shrink:0;}
+        .team-name{font-weight:600;font-size:0.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; cursor:pointer; transition:color .2s;}
+        .team-name:hover{color:var(--green);}
+        .score-box{width:22%;text-align:center;font-family:'Outfit';font-size:1.3rem;font-weight:800;background:rgba(0,0,0,0.35);border-radius:10px;padding:8px 0;border:1px solid var(--border);flex-shrink:0;}
+        .score-box.vs{font-size:0.85rem;color:var(--muted);font-weight:600;}
+        .match-date{text-align:center;font-size:0.68rem;color:var(--muted);margin-top:1.1rem;font-weight:500;letter-spacing:0.4px;}
+        .match-date.up{color:var(--green);}
+
+        .group-title{font-size:1.05rem;text-transform:uppercase;letter-spacing:1.2px;margin:2.2rem 0 1.2rem;color:var(--white);}
+        .group-title:first-of-type{margin-top:0;}
+        .group-title i{color:var(--green);margin-right:8px;}
+
+        .table-container{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);}
+        .table-wrap{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-width:540px;}
+        table{width:100%;border-collapse:collapse;}
+        th{padding:1.1rem;text-align:left;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);background:rgba(0,0,0,0.25);border-bottom:1px solid var(--border);}
+        tr{transition:background-color 0.25s var(--ease);}
+        tr:hover td{background-color:rgba(255,255,255,0.03);}
+        td{padding:0.95rem 1rem;font-size:0.88rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+        tr:last-child td{border-bottom:none;}
+        td:first-child{font-weight:800;color:var(--muted);width:45px;text-align:center;font-family:'Outfit';font-size:1.05rem;}
+        .top-pos{color:var(--gold)!important;text-shadow:0 0 14px rgba(245,166,35,0.4);}
+        .team-cell{display:flex;align-items:center;gap:10px;}
+        .table-crest{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.08);object-fit:contain;border:1px solid var(--border);flex-shrink:0;}
+        tr.row-promo td{background:var(--promo);}
+        tr.row-promo:hover td{background:rgba(126,211,33,0.18);}
+        tr.row-promo td:first-child{border-left:3px solid var(--promo-border);color:var(--promo-border);}
+        tr.row-barage td{background:var(--barage);}
+        tr.row-barage:hover td{background:rgba(245,166,35,0.18);}
+        tr.row-barage td:first-child{border-left:3px solid var(--barage-border);color:var(--barage-border);}
+        tr.row-releg td{background:var(--releg);}
+        tr.row-releg:hover td{background:rgba(239,68,68,0.18);}
+        tr.row-releg td:first-child{border-left:3px solid var(--releg-border);color:var(--releg-border);}
+
+        .legend{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.2rem;padding:1.1rem 1.4rem;background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);}
+        .legend-item{display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--muted);}
+        .legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+        .dot-promo{background:var(--promo-border);box-shadow:0 0 6px var(--promo-border);}
+        .dot-barage{background:var(--barage-border);box-shadow:0 0 6px var(--barage-border);}
+        .dot-releg{background:var(--releg-border);box-shadow:0 0 6px var(--releg-border);}
+
+        /* MODALE */
+        .modal-overlay {display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(5px); z-index:999; align-items:center; justify-content:center; padding:15px;}
+        .modal-overlay.active {display:flex;}
+        .modal-content {background:var(--navy); border:1px solid var(--green); box-shadow:0 0 30px var(--green-glow); border-radius:var(--radius); width:100%; max-width:650px; max-height:90vh; overflow-y:auto; position:relative; padding:2rem;}
+        .modal-close {position:absolute; top:15px; right:15px; font-size:1.5rem; color:var(--muted); transition:color .2s;}
+        .modal-close:hover {color:var(--white);}
+        .modal-header {display:flex; align-items:center; gap:15px; margin-bottom:1.5rem; border-bottom:1px solid var(--border); padding-bottom:1.5rem;}
+        .modal-crest {width:70px; height:70px; border-radius:50%; border:2px solid var(--border); object-fit:contain;}
+        .modal-title {font-family:'Outfit'; font-size:1.8rem; font-weight:800; color:var(--white);}
+
+        .admin-box{max-width:720px;margin:0 auto;}
+        input,select,textarea{width:100%;padding:14px 16px;margin-bottom:12px;border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,0.35);color:var(--white);font-size:0.9rem;transition:all .3s var(--ease);}
+        input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);background:rgba(0,0,0,0.5);box-shadow:0 0 0 4px var(--green-glow);}
+        input::placeholder,textarea::placeholder{color:var(--muted);}
+        input[type="datetime-local"]{color-scheme:dark;}
+        textarea{resize:vertical;min-height:100px;}
+        .btn{width:100%;padding:16px;background:var(--green);color:var(--navy);border-radius:12px;font-weight:700;margin-top:0.4rem;transition:all .3s var(--ease);font-size:0.88rem;text-transform:uppercase;letter-spacing:0.8px;}
+        .btn:hover{background:#8fe635;transform:translateY(-2px);box-shadow:0 10px 24px var(--green-glow);}
+        .btn-sm{padding:9px 14px;border-radius:9px;font-size:0.76rem;color:var(--muted);transition:all .2s;font-weight:600;}
+        .btn-sm:hover{background:rgba(255,255,255,0.08);color:var(--green);}
+        .btn-del:hover{color:#ff6b6b;background:rgba(255,107,107,0.12);}
+        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+        .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+        .hero{text-align:center;padding:4.5rem 0 3rem;}
+        .hero-logo{width:130px;height:130px;margin:0 auto 1.8rem;filter:drop-shadow(0 10px 30px rgba(126,211,33,0.22));}
+        .hero h1{font-size:2.8rem;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:1.2px;}
+        .hero h1 span{color:var(--green);}
+        .hero p{color:var(--muted);max-width:480px;margin:0 auto;font-size:1.02rem;}
+
+        .home-section{margin-bottom:3.5rem;}
+        .home-section h2{font-size:1.3rem;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:1.5rem;}
+        .home-section h2 span{color:var(--green);}
+        .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.4rem;}
+        .feature-card{text-align:center;padding:2.2rem 1.4rem;}
+        .feature-icon{font-size:2.2rem;color:var(--green);margin-bottom:1rem;}
+        .feature-card h3{font-size:1.05rem;margin-bottom:0.5rem;}
+        .feature-card p{color:var(--muted);font-size:0.88rem;}
+        .stats-row{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;margin:2.5rem 0;}
+        .stat-item{text-align:center;}
+        .stat-num{font-family:'Outfit';font-size:2.5rem;font-weight:800;color:var(--green);display:block;}
+        .stat-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);}
+
+        .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.8rem;}
+        .contact-info{display:flex;flex-direction:column;gap:1.4rem;}
+        .contact-item{display:flex;align-items:flex-start;gap:0.9rem;}
+        .contact-item i{color:var(--green);font-size:1.1rem;margin-top:3px;flex-shrink:0;}
+        .contact-item h4{font-size:0.92rem;margin-bottom:0.2rem;}
+        .contact-item p{color:var(--muted);font-size:0.86rem;}
+
+        .wip-container{text-align:center;padding:5rem 1.5rem;}
+        .wip-icon{font-size:3.5rem;color:var(--gold);margin-bottom:1.2rem;animation:pulse 2s infinite;}
+        @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(1.04)}}
+        .wip-title{font-size:1.6rem;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:1.2px;}
+        .wip-text{color:var(--muted);max-width:460px;margin:0 auto;font-size:1rem;}
+        .wip-badge{display:inline-block;margin-top:1.8rem;padding:7px 18px;background:rgba(245,166,35,0.12);border:1px solid var(--gold);border-radius:18px;color:var(--gold);font-size:0.76rem;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;}
+
+        footer{background:rgba(11,22,44,0.95);border-top:1px solid var(--border);padding:2.5rem 4% 1.8rem;margin-top:3.5rem;}
+        .footer-content{max-width:1160px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1.8rem;}
+        .footer-col h4{font-size:0.8rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:0.9rem;}
+        .footer-col a{display:block;color:var(--muted);font-size:0.85rem;margin-bottom:0.5rem;transition:color .2s;}
+        .footer-col a:hover{color:var(--white);}
+        .footer-bottom{max-width:1160px;margin:1.8rem auto 0;padding-top:1.2rem;border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:0.76rem;}
+        .secret-trigger{position:fixed;bottom:0;right:0;width:70px;height:70px;z-index:999;cursor:default;}
+
+        @media(max-width:960px){
+            nav{height:auto;min-height:70px;flex-direction:column;gap:10px;padding:12px 16px;}
+            .logo-wrap{width:100%;justify-content:center;}
+            .tabs{max-width:100%;width:100%;justify-content:center;flex-wrap:wrap;gap:4px;overflow:visible;padding-bottom:6px;}
+            .tab{padding:0.45rem 0.6rem;font-size:0.72rem;}
+            main{margin-top:150px;padding:0 12px 2.5rem;}
+            .hero{padding:2.8rem 0 2rem;}
+            .hero h1{font-size:2.05rem;}
+            .hero-logo{width:105px;height:105px;margin-bottom:1.4rem;}
+            .grid{grid-template-columns:1fr;gap:1.1rem;}
+            .card{padding:1.35rem;border-radius:16px;}
+            .sub-nav-container{margin-bottom:1.6rem;}
+            .sub-tab{padding:0.75rem 1.1rem;font-size:0.75rem;}
+            .form-grid,.form-grid-3{grid-template-columns:1fr;gap:8px;}
+            .logo-img{height:38px;}
+            .contact-grid{grid-template-columns:1fr;}
+            .stats-row{gap:1.2rem;margin:2rem 0;}
+            .stat-num{font-size:2rem;}
+            .footer-content{flex-direction:column;gap:1.4rem;}
+            .table-container{margin:0 -12px;padding:0 12px;border-radius:0;}
+            .table-wrap{border-radius:14px;}
+            .team-name{font-size:0.86rem;}
+            .team-crest{width:26px;height:26px;}
+            .score-box{font-size:1.15rem;padding:7px 0;width:24%;}
+            .legend{gap:0.7rem;padding:0.9rem 1.1rem;}
+            .legend-item{font-size:0.72rem;}
+            input,select,textarea{padding:13px 14px;font-size:0.88rem;border-radius:10px;}
+            .btn{padding:14px;border-radius:10px;}
+        }
+        @media(max-width:380px){
+            .tab{padding:0.35rem 0.45rem;font-size:0.65rem;}
+            .team-name{font-size:0.8rem;}
+            .score-box{font-size:1.05rem;width:25%;}
+            .team-wrap{width:37.5%;gap:5px;}
+        }
+
+
+        /* =========================================================
+           APP UI — nowy mobilny wygląd / styl wynikowej aplikacji
+           Logika, dane i istniejące klasy JS pozostają bez zmian.
+           ========================================================= */
+        :root{
+            --app-bg:#eef1f5;
+            --app-panel:#ffffff;
+            --app-panel-2:#f7f8fa;
+            --app-ink:#172033;
+            --app-muted:#7c879a;
+            --app-line:#e3e7ee;
+            --app-green:#76c51b;
+            --app-green-dark:#4e9210;
+            --app-live:#ff3d57;
+            --app-shadow:0 6px 24px rgba(17,31,54,.08);
+        }
+
+        html{background:var(--app-bg);}
+        body{
+            background:var(--app-bg);
+            background-image:none;
+            color:var(--app-ink);
+            font-family:'Inter',sans-serif;
+            padding-bottom:env(safe-area-inset-bottom);
+        }
+        h1,h2,h3,.logo-text{font-family:'Outfit',sans-serif;}
+
+        nav{
+            height:66px;
+            padding:0 max(14px,calc((100vw - 1180px)/2));
+            background:#0e1726;
+            border-bottom:0;
+            box-shadow:0 2px 18px rgba(9,18,33,.16);
+            backdrop-filter:none;
+        }
+        .logo-wrap{gap:9px;}
+        .logo-img{height:38px;filter:none;}
+        .logo-text{font-size:1rem;line-height:1;}
+        .logo-sub{font-size:.52rem;letter-spacing:1.6px;opacity:.75;}
+        .tabs{
+            max-width:75%;
+            gap:2px;
+            justify-content:flex-end;
+            padding:3px;
+        }
+        .tab{
+            padding:.48rem .72rem;
+            border-radius:8px;
+            font-size:.71rem;
+            color:#aeb9c9;
+        }
+        .tab:hover{background:rgba(255,255,255,.07);color:#fff;}
+        .tab.active{background:var(--app-green);color:#132016;box-shadow:none;}
+
+        main{
+            max-width:980px;
+            margin:84px auto 0;
+            padding:0 14px 36px;
+            min-height:calc(100vh - 150px);
+        }
+        .section.active{min-height:calc(100vh - 150px);}
+
+        .hero{
+            text-align:left;
+            padding:20px 4px 22px;
+        }
+        .hero-logo{width:74px;height:74px;margin:0 0 14px;filter:none;}
+        .hero h1{font-size:1.82rem;margin-bottom:4px;letter-spacing:.3px;}
+        .hero h1 span{color:var(--app-green-dark);}
+        .hero p{color:var(--app-muted);font-size:.84rem;max-width:650px;line-height:1.55;margin:0;}
+
+        .stats-row{
+            justify-content:stretch;
+            gap:0;
+            margin:0 0 22px;
+            background:var(--app-panel);
+            border:1px solid var(--app-line);
+            border-radius:14px;
+            overflow:hidden;
+            box-shadow:var(--app-shadow);
+        }
+        .stat-item{flex:1;padding:13px 8px;border-right:1px solid var(--app-line);}
+        .stat-item:last-child{border-right:0;}
+        .stat-num{font-size:1.05rem;color:var(--app-ink);line-height:1.15;}
+        .stat-label{font-size:.55rem;color:var(--app-muted);letter-spacing:.8px;margin-top:4px;}
+
+        .home-section{margin-bottom:28px;}
+        .home-section h2,.group-title{
+            font-size:.85rem;
+            letter-spacing:.7px;
+            color:#3d485b;
+            margin:0 0 10px;
+            text-transform:uppercase;
+        }
+        .home-section h2 span{color:var(--app-green-dark);}
+        .group-title i{color:var(--app-green-dark);}
+
+        .grid{grid-template-columns:1fr;gap:8px;}
+        .card{
+            background:var(--app-panel);
+            border:1px solid var(--app-line);
+            border-radius:12px;
+            padding:12px;
+            box-shadow:0 3px 10px rgba(17,31,54,.035);
+            backdrop-filter:none;
+            color:var(--app-ink);
+        }
+        .card::before{display:none;}
+        .card:hover{
+            transform:none;
+            border-color:#d8dde6;
+            box-shadow:var(--app-shadow);
+        }
+
+        .league-label{
+            color:#8a94a5;
+            font-size:.58rem;
+            letter-spacing:1px;
+            margin-bottom:9px;
+        }
+        .league-label i{color:var(--app-green-dark);}
+        .badge-up{color:var(--app-live);font-size:.58rem;}
+
+        .match-row{margin-bottom:3px;gap:8px;}
+        .team-wrap{width:40%;gap:7px;}
+        .team-wrap.away{flex-direction:row-reverse;}
+        .team-crest{width:28px;height:28px;background:#f2f4f7;border:1px solid #e0e5ec;}
+        .team-name{font-size:.79rem;color:#263247;}
+        .team-name:hover{color:var(--app-green-dark);}
+        .score-box{
+            width:74px;
+            padding:7px 4px;
+            border:0;
+            border-radius:8px;
+            background:#f3f5f8;
+            color:#182235;
+            font-size:1.1rem;
+        }
+        .score-box.vs{background:#edf6e7;color:var(--app-green-dark);font-size:.78rem;}
+        .match-date{font-size:.59rem;color:#98a2b2;margin-top:7px;}
+        .match-date.up{color:var(--app-green-dark);}
+
+        .sub-nav-container{margin-bottom:14px;position:sticky;top:66px;z-index:30;padding-top:5px;background:rgba(238,241,245,.96);backdrop-filter:blur(10px);}
+        .group-toggle{gap:6px;margin-bottom:7px;padding-bottom:0;}
+        .grp-tab{
+            padding:7px 10px;
+            border-radius:9px;
+            border:1px solid var(--app-line);
+            color:#7f8998;
+            background:#f8f9fb;
+            font-size:.67rem;
+        }
+        .grp-tab.active{background:#1a2535;color:#fff;border-color:#1a2535;box-shadow:none;}
+        .sub-nav{
+            border-bottom:0;
+            background:var(--app-panel);
+            border:1px solid var(--app-line);
+            border-radius:10px;
+            padding:3px;
+        }
+        .sub-tab{padding:7px 10px;font-size:.65rem;color:#7a8596;border-radius:7px;}
+        .sub-tab::after{display:none;}
+        .sub-tab.active{background:#edf6e7;color:var(--app-green-dark);}
+
+        .table-container{border-radius:12px;}
+        .table-wrap{min-width:0;background:var(--app-panel);border:1px solid var(--app-line);border-radius:12px;box-shadow:var(--app-shadow);}
+        th{padding:9px 8px;font-size:.56rem;color:#8993a4;background:#f6f7f9;border-bottom:1px solid var(--app-line);}
+        td{padding:9px 8px;font-size:.76rem;border-bottom:1px solid #edf0f4;}
+        td:first-child{width:30px;font-size:.84rem;}
+        .table-crest{width:24px;height:24px;background:#f2f4f7;border:1px solid #e0e5ec;}
+        .team-cell{gap:7px;}
+        tr.row-promo td{background:#eef8e8;}
+        tr.row-barage td{background:#fff7e8;}
+        tr.row-releg td{background:#fff0f2;}
+        tr.row-promo td:first-child{border-left:3px solid var(--app-green);color:var(--app-green-dark);}
+        tr.row-barage td:first-child{border-left:3px solid #f0a51a;color:#b77800;}
+        tr.row-releg td:first-child{border-left:3px solid #ef5366;color:#c62d42;}
+        .legend{margin-top:9px;padding:9px 10px;background:var(--app-panel);border:1px solid var(--app-line);border-radius:10px;gap:8px;}
+        .legend-item{font-size:.62rem;color:#7d8796;}
+
+        input,select,textarea{
+            background:#f8f9fb;
+            color:#202b3d;
+            border:1px solid #dfe4eb;
+            border-radius:10px;
+            padding:11px 12px;
+        }
+        input:focus,select:focus,textarea:focus{border-color:#a6cf7c;background:#fff;box-shadow:0 0 0 3px rgba(118,197,27,.12);}
+        input::placeholder,textarea::placeholder{color:#a3acb9;}
+        .btn{background:var(--app-green);color:#132016;border-radius:10px;padding:12px;font-size:.78rem;box-shadow:none;}
+        .btn:hover{background:#85d728;transform:none;box-shadow:none;}
+        .btn-sm{color:#7d8796;border-radius:8px;font-size:.68rem;}
+        .btn-sm:hover{background:#f0f2f5;color:var(--app-green-dark);}
+
+        .wip-container{padding:70px 18px;text-align:center;background:var(--app-panel);border:1px solid var(--app-line);border-radius:14px;box-shadow:var(--app-shadow);}
+        .wip-icon{font-size:2.5rem;color:#d0931d;}
+        .wip-title{font-size:1.2rem;color:#263247;}
+        .wip-text{font-size:.82rem;color:var(--app-muted);}
+        .wip-badge{border-color:#e6b761;background:#fff8e9;color:#b97800;}
+
+        .contact-grid{gap:10px;}
+        .contact-item i{color:var(--app-green-dark);}
+        .contact-item p{color:var(--app-muted);}
+
+        footer{background:#101a2a;border-top:0;padding:24px 14px calc(88px + env(safe-area-inset-bottom));margin-top:14px;}
+        .footer-content{gap:18px;}
+        .footer-col h4{color:#a8d97c;}
+        .footer-col a{color:#9aa6b8;font-size:.76rem;}
+        .footer-bottom{border-top-color:rgba(255,255,255,.08);font-size:.64rem;}
+
+        .modal-overlay{background:rgba(12,20,32,.65);backdrop-filter:blur(8px);padding:10px;}
+        .modal-content{background:#fff;color:var(--app-ink);border:0;box-shadow:0 20px 60px rgba(5,14,25,.24);border-radius:16px;padding:16px;max-height:92vh;}
+        .modal-title{color:#182235;font-size:1.35rem;}
+        .modal-header{border-bottom-color:var(--app-line);}
+        .modal-close{color:#8791a1;}
+
+        .app-bottom-nav{
+            display:none;
+            position:fixed;
+            left:0;right:0;bottom:0;
+            z-index:998;
+            padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+            background:rgba(14,23,38,.97);
+            border-top:1px solid rgba(255,255,255,.08);
+            box-shadow:0 -8px 28px rgba(7,15,27,.18);
+        }
+        .bottom-tab{
+            flex:1;
+            min-width:0;
+            padding:7px 4px 6px;
+            color:#8995a7;
+            font-size:.58rem;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:3px;
+        }
+        .bottom-tab i{font-size:.94rem;}
+        .bottom-tab.active{color:var(--app-green);}
+
+        @media(min-width:961px){
+            body{background:linear-gradient(180deg,#0e1726 0 66px,var(--app-bg) 66px 100%);}
+            main{background:transparent;}
+        }
+
+        @media(max-width:960px){
+            body{padding-bottom:84px;}
+            nav{height:66px;min-height:66px;flex-direction:row;gap:0;padding:0 12px;}
+            .logo-wrap{width:auto;justify-content:flex-start;}
+            .tabs{max-width:62%;width:auto;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;gap:2px;padding:0;}
+            .tab{padding:7px 8px;font-size:.63rem;}
+            main{margin-top:78px;padding:0 10px 18px;}
+            .section.active{min-height:calc(100vh - 150px);}
+            .hero{padding:16px 4px 18px;}
+            .hero h1{font-size:1.7rem;}
+            .stats-row{border-radius:12px;}
+            .stat-num{font-size:.95rem;}
+            .app-bottom-nav{display:flex;}
+            .sub-nav-container{top:66px;}
+            .grid{gap:7px;}
+            .card{padding:11px;border-radius:11px;}
+            .table-container{margin:0;border-radius:12px;}
+            .table-wrap{min-width:0;}
+            footer{display:none;}
+        }
+
+
+        /* FINAL MOBILE OVERRIDE — only bottom navigation, dark app theme */
+        html,body{background:#070b12!important;color:#f3f6fb!important;}
+        body{background-image:radial-gradient(circle at 20% 0%,rgba(126,211,33,.06),transparent 32%),radial-gradient(circle at 100% 30%,rgba(36,99,235,.05),transparent 28%)!important;}
+        nav{background:rgba(7,11,18,.96)!important;border-bottom:1px solid rgba(255,255,255,.06)!important;box-shadow:0 8px 24px rgba(0,0,0,.28)!important;}
+        nav .tabs{display:none!important;}
+        main{background:transparent!important;color:#f3f6fb!important;margin-top:78px!important;padding-bottom:18px!important;}
+        .hero h1{color:#f7fafc!important;}
+        .hero h1 span{color:#8ad63d!important;}
+        .hero p{color:#8995a7!important;}
+        .stats-row,.card,.table-wrap,.legend,.sub-nav,.wip-container{background:#0d141f!important;border-color:rgba(255,255,255,.075)!important;box-shadow:0 8px 26px rgba(0,0,0,.18)!important;color:#f3f6fb!important;}
+        .stat-item{border-color:rgba(255,255,255,.07)!important;}
+        .stat-num{color:#f3f6fb!important;}
+        .stat-label,.league-label,.match-date,.legend-item{color:#7f8b9d!important;}
+        .home-section h2,.group-title{color:#e7ebf1!important;}
+        .home-section h2 span{color:#8ad63d!important;}
+        .league-label i,.group-title i{color:#8ad63d!important;}
+        .team-name{color:#edf2f8!important;}
+        .team-crest,.table-crest{background:#141c28!important;border-color:rgba(255,255,255,.08)!important;}
+        .score-box{background:#141c28!important;color:#f3f6fb!important;}
+        .score-box.vs{background:rgba(126,211,33,.12)!important;color:#91dc45!important;}
+        .sub-nav-container{background:rgba(7,11,18,.94)!important;backdrop-filter:blur(14px)!important;}
+        .grp-tab{background:#111a27!important;color:#7f8b9d!important;border-color:rgba(255,255,255,.07)!important;}
+        .grp-tab.active{background:#8ad63d!important;color:#0a1208!important;border-color:#8ad63d!important;}
+        .sub-tab{color:#7f8b9d!important;}
+        .sub-tab.active{background:rgba(126,211,33,.13)!important;color:#91dc45!important;}
+        th{background:#111a27!important;color:#7f8b9d!important;border-bottom-color:rgba(255,255,255,.07)!important;}
+        td{border-bottom-color:rgba(255,255,255,.055)!important;}
+        tr.row-promo td{background:rgba(126,211,33,.08)!important;}
+        tr.row-barage td{background:rgba(245,166,35,.08)!important;}
+        tr.row-releg td{background:rgba(239,68,68,.08)!important;}
+        input,select,textarea{background:#0f1723!important;color:#eef2f7!important;border-color:rgba(255,255,255,.09)!important;}
+        input::placeholder,textarea::placeholder{color:#687487!important;}
+        input:focus,select:focus,textarea:focus{background:#111b29!important;border-color:#7fbd3a!important;box-shadow:0 0 0 3px rgba(126,211,33,.12)!important;}
+        .btn{background:#8ad63d!important;color:#091107!important;}
+        .btn-sm{color:#8c97a7!important;}
+        .btn-sm:hover{background:#162130!important;color:#91dc45!important;}
+        .modal-content{background:#0d141f!important;color:#f3f6fb!important;border:1px solid rgba(255,255,255,.08)!important;}
+        .modal-title{color:#f3f6fb!important;}
+        .modal-header{border-bottom-color:rgba(255,255,255,.07)!important;}
+        .modal-close{color:#8792a3!important;}
+        .contact-item p,.wip-text{color:#8995a7!important;}
+        footer{background:#070b12!important;}
+        .app-bottom-nav{background:rgba(6,10,16,.98)!important;border-top-color:rgba(255,255,255,.08)!important;box-shadow:0 -10px 30px rgba(0,0,0,.35)!important;}
+        .bottom-tab{color:#6f7b8d!important;}
+        .bottom-tab.active{color:#8ad63d!important;}
+        @media(min-width:0px){
+            nav{height:64px!important;min-height:64px!important;justify-content:flex-start!important;}
+            nav .logo-wrap{width:auto!important;}
+            main{margin-top:72px!important;}
+            footer{display:none!important;}
+            .app-bottom-nav{display:flex!important;}
+        }
+
+        @media(max-width:430px){
+            .logo-text{font-size:.9rem;}
+            .logo-sub{display:none;}
+            .logo-img{height:34px;}
+            .tabs{max-width:58%;}
+            .tab{padding:6px 7px;font-size:.59rem;}
+            .hero p{font-size:.77rem;}
+            .stats-row .stat-item{padding:11px 5px;}
+            .stat-num{font-size:.88rem;}
+            .stat-label{font-size:.49rem;}
+            .team-name{font-size:.75rem;}
+            .score-box{width:64px;font-size:1rem;}
+            .sub-nav-container{margin-left:-2px;margin-right:-2px;}
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-wrap">
+            <img src="logo.png" alt="Strefa Gola" class="logo-img" onerror="this.style.display='none'">
+            <div>
+                <div class="logo-text">Strefa<span>Gola</span></div>
+                <div class="logo-sub">Podkarpacie</div>
+            </div>
+        </div>
+        <div class="tabs">
+            <button class="tab active" onclick="go('home')">Start</button>
+            <button class="tab" onclick="go('matches')">Rozgrywki</button>
+            <button class="tab" onclick="go('table')">Tabela</button>
+            <button class="tab" onclick="go('stats')">Statystyki</button>
+            <button class="tab" onclick="go('transfers')">Transfery</button>
+            <button class="tab" onclick="go('streams')">Transmisje</button>
+            <button class="tab" onclick="go('posts')">Posty</button>
+            <button class="tab" onclick="go('contact')">Kontakt</button>
+        </div>
+    </nav>
+
+    <div class="secret-trigger" id="mobile-admin-trigger"></div>
+
+    <!-- MODAL PROFILU KLUBU -->
+    <div id="club-modal" class="modal-overlay" onclick="if(event.target===this) closeClubProfile()">
+        <div class="modal-content anim">
+            <button class="modal-close" onclick="closeClubProfile()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header">
+                <div id="modal-crest-container"></div>
+                <h2 class="modal-title" id="modal-team-name">Nazwa Klubu</h2>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-bottom:1.2rem; border-bottom:1px solid var(--border); padding-bottom:10px;">
+                <button class="btn-sm" id="modal-tab-up" onclick="switchModalMatches('up')" style="background:var(--green); color:var(--navy); font-weight:700;"><i class="fa-solid fa-calendar-days"></i> Nadchodzące</button>
+                <button class="btn-sm" id="modal-tab-res" onclick="switchModalMatches('res')" style="background:rgba(255,255,255,0.05); color:var(--muted); font-weight:700;"><i class="fa-solid fa-flag-checkered"></i> Ostatnie Wyniki</button>
+            </div>
+
+            <div id="modal-upcoming" class="grid" style="grid-template-columns:1fr; gap:0.8rem;"></div>
+            <div id="modal-results" class="grid" style="grid-template-columns:1fr; gap:0.8rem; display:none;"></div>
+        </div>
+    </div>
+
+    <!-- MODAL POSTA -->
+    <div id="post-modal" class="modal-overlay" onclick="if(event.target===this) closePostModal()">
+        <div class="modal-content anim" style="max-width:700px;">
+            <button class="modal-close" onclick="closePostModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="post-modal-body"></div>
+        </div>
+    </div>
+
+    <div class="app-bottom-nav" aria-label="Nawigacja aplikacji">
+        <button class="bottom-tab active" data-section="home" onclick="go('home')"><i class="fa-solid fa-house"></i><span>Start</span></button>
+        <button class="bottom-tab" data-section="matches" onclick="go('matches')"><i class="fa-solid fa-futbol"></i><span>Mecze</span></button>
+        <button class="bottom-tab" data-section="table" onclick="go('table')"><i class="fa-solid fa-ranking-star"></i><span>Tabela</span></button>
+        <button class="bottom-tab" data-section="stats" onclick="go('stats')"><i class="fa-solid fa-chart-simple"></i><span>Statystyki</span></button>
+        <button class="bottom-tab" data-section="transfers" onclick="go('transfers')"><i class="fa-solid fa-right-left"></i><span>Transfery</span></button>
+    </div>
+
+    <main>
+        <section id="home" class="section active">
+            <div class="hero anim">
+                <img src="logo.png" alt="Logo" class="hero-logo" onerror="this.outerHTML='<div style=\'width:110px;height:110px;margin:0 auto 1.5rem;border-radius:50%;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:2.8rem;color:var(--green);\'><i class=\'fa-solid fa-futbol\'></i></div>'">
+                <h1>Strefa<span>Gola</span></h1>
+                <p>IV Liga, Klasa Okręgowa oraz A i B Klasy Jarosław, Przeworsk, Rzeszów, Dębica, Stalowa Wola, Krosno.<br>Dane. Statystyki. Profesjonalizm.</p>
+            </div>
+
+            <div class="stats-row anim d1">
+                <div class="stat-item"><span class="stat-num">12</span><span class="stat-label">Lig</span></div>
+                <div class="stat-item"><span class="stat-num">150+</span><span class="stat-label">Drużyn</span></div>
+                <div class="stat-item"><span class="stat-num">Bieżąco</span><span class="stat-label">Aktualizacje</span></div>
+                <div class="stat-item"><span class="stat-num">Podkarpacie</span><span class="stat-label">Okręg</span></div>
+            </div>
+
+            <div class="home-section anim d2">
+                <h2>Nadchodzące <span>mecze</span></h2>
+                <div id="home-upcoming" class="grid"></div>
+            </div>
+
+            <div class="home-section anim d3">
+                <h2>Ostatnie <span>spotkania</span></h2>
+                <div id="home-grid" class="grid"></div>
+            </div>
+
+            <div class="home-section anim d4">
+                <h2>Szybki podgląd <span>tabeli</span></h2>
+                <div class="table-container">
+                    <div class="table-wrap">
+                        <table><thead><tr><th>#</th><th>Drużyna</th><th>M</th><th>Pkt</th><th>Bilans</th></tr></thead><tbody id="home-tb"></tbody></table>
+                    </div>
+                </div>
+                <div class="legend" id="home-legend"></div>
+                <div style="text-align:center;margin-top:1.4rem;">
+                    <button class="btn-sm" onclick="go('table')" style="border:1px solid var(--border);padding:11px 22px;">Zobacz pełną tabelę →</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="matches" class="section">
+            <div class="sub-nav-container anim" id="matches-sub">
+                <div class="group-toggle">
+                    <button class="grp-tab active" onclick="switchGroup('matches', 'okr', this)">IV Liga & Okręgowe</button>
+                    <button class="grp-tab" onclick="switchGroup('matches', 'a', this)">A Klasy</button>
+                    <button class="grp-tab" onclick="switchGroup('matches', 'b', this)">B Klasy</button>
+                </div>
+                <div class="sub-nav grp-okr">
+                    <button class="sub-tab active" onclick="filterM('all',this)">Wszystkie Ligi</button>
+                    <button class="sub-tab" onclick="filterM('iv_liga',this)">IV Liga</button>
+                    <button class="sub-tab" onclick="filterM('okr_jaroslaw',this)">Okr. Jarosław</button>
+                    <button class="sub-tab" onclick="filterM('okr_krosno',this)">Okr. Krosno</button>
+                    <button class="sub-tab" onclick="filterM('okr_rzeszow',this)">Okr. Rzeszów</button>
+                    <button class="sub-tab" onclick="filterM('okr_debica',this)">Okr. Dębica</button>
+                    <button class="sub-tab" onclick="filterM('okr_stalowa',this)">Okr. Stalowa Wola</button>
+                </div>
+                <div class="sub-nav grp-a" style="display:none;">
+                    <button class="sub-tab" onclick="filterM('a_przeworsk',this)">A Klasa Przeworsk</button>
+                    <button class="sub-tab" onclick="filterM('a_jaroslaw',this)">A Klasa Jarosław</button>
+                    <button class="sub-tab" onclick="filterM('a_rzeszow',this)">A Klasa Rzeszów</button>
+                </div>
+                <div class="sub-nav grp-b" style="display:none;">
+                    <button class="sub-tab" onclick="filterM('b_przeworsk',this)">B Klasa Przeworsk</button>
+                    <button class="sub-tab" onclick="filterM('b_jaroslaw',this)">B Klasa Jarosław</button>
+                    <button class="sub-tab" onclick="filterM('b_rzeszow',this)">B Klasa Rzeszów</button>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-bottom:1.5rem;" class="anim d1">
+                <button class="btn-sm" id="btn-match-all" onclick="setMatchType('all')" style="background:var(--green); color:var(--navy); font-weight:700; padding:8px 16px; border-radius:10px;">Wszystkie Mecze</button>
+                <button class="btn-sm" id="btn-match-up" onclick="setMatchType('upcoming')" style="background:rgba(255,255,255,0.05); color:var(--muted); font-weight:700; padding:8px 16px; border-radius:10px;"><i class="fa-regular fa-clock"></i> Nadchodzące</button>
+                <button class="btn-sm" id="btn-match-res" onclick="setMatchType('results')" style="background:rgba(255,255,255,0.05); color:var(--muted); font-weight:700; padding:8px 16px; border-radius:10px;"><i class="fa-solid fa-flag-checkered"></i> Wyniki</button>
+            </div>
+
+            <h3 class="group-title anim d1" id="title-upcoming"><i class="fa-regular fa-clock"></i>Nadchodzące mecze</h3>
+            <div id="upcoming-grid" class="grid anim d1"></div>
+
+            <h3 class="group-title anim d2" id="title-results" style="margin-top:3.2rem;"><i class="fa-solid fa-flag-checkered"></i>Wyniki</h3>
+            <div id="results-grid" class="grid anim d2"></div>
+        </section>
+
+        <section id="table" class="section">
+            <div class="sub-nav-container anim" id="table-sub">
+                <div class="group-toggle">
+                    <button class="grp-tab active" onclick="switchGroup('table', 'okr', this)">IV Liga & Okręgowe</button>
+                    <button class="grp-tab" onclick="switchGroup('table', 'a', this)">A Klasy</button>
+                    <button class="grp-tab" onclick="switchGroup('table', 'b', this)">B Klasy</button>
+                </div>
+                <div class="sub-nav grp-okr">
+                    <button class="sub-tab active" onclick="loadTable('iv_liga',this)">IV Liga</button>
+                    <button class="sub-tab" onclick="loadTable('okr_jaroslaw',this)">Okr. Jarosław</button>
+                    <button class="sub-tab" onclick="loadTable('okr_krosno',this)">Okr. Krosno</button>
+                    <button class="sub-tab" onclick="loadTable('okr_rzeszow',this)">Okr. Rzeszów</button>
+                    <button class="sub-tab" onclick="loadTable('okr_debica',this)">Okr. Dębica</button>
+                    <button class="sub-tab" onclick="loadTable('okr_stalowa',this)">Okr. Stalowa Wola</button>
+                </div>
+                <div class="sub-nav grp-a" style="display:none;">
+                    <button class="sub-tab" onclick="loadTable('a_przeworsk',this)">A Klasa Przeworsk</button>
+                    <button class="sub-tab" onclick="loadTable('a_jaroslaw',this)">A Klasa Jarosław</button>
+                    <button class="sub-tab" onclick="loadTable('a_rzeszow',this)">A Klasa Rzeszów</button>
+                </div>
+                <div class="sub-nav grp-b" style="display:none;">
+                    <button class="sub-tab" onclick="loadTable('b_przeworsk',this)">B Klasa Przeworsk</button>
+                    <button class="sub-tab" onclick="loadTable('b_jaroslaw',this)">B Klasa Jarosław</button>
+                    <button class="sub-tab" onclick="loadTable('b_rzeszow',this)">B Klasa Rzeszów</button>
+                </div>
+            </div>
+            <div class="table-container anim d1">
+                <div class="table-wrap">
+                    <table><thead><tr><th>#</th><th>Drużyna</th><th>M</th><th>Pkt</th><th>Bilans</th></tr></thead><tbody id="tb"></tbody></table>
+                </div>
+            </div>
+            <div class="legend anim d2" id="table-legend"></div>
+        </section>
+
+        <section id="stats" class="section">
+            <div class="sub-nav-container anim" id="stats-sub">
+                <div class="group-toggle">
+                    <button class="grp-tab active" onclick="switchGroup('stats', 'okr', this)">IV Liga & Okręgowe</button>
+                    <button class="grp-tab" onclick="switchGroup('stats', 'a', this)">A Klasy</button>
+                    <button class="grp-tab" onclick="switchGroup('stats', 'b', this)">B Klasy</button>
+                </div>
+                <div class="sub-nav grp-okr">
+                    <button class="sub-tab active" onclick="loadStats('iv_liga',this)">IV Liga</button>
+                    <button class="sub-tab" onclick="loadStats('okr_jaroslaw',this)">Okr. Jarosław</button>
+                    <button class="sub-tab" onclick="loadStats('okr_krosno',this)">Okr. Krosno</button>
+                    <button class="sub-tab" onclick="loadStats('okr_rzeszow',this)">Okr. Rzeszów</button>
+                    <button class="sub-tab" onclick="loadStats('okr_debica',this)">Okr. Dębica</button>
+                    <button class="sub-tab" onclick="loadStats('okr_stalowa',this)">Okr. Stalowa Wola</button>
+                </div>
+                <div class="sub-nav grp-a" style="display:none;">
+                    <button class="sub-tab" onclick="loadStats('a_przeworsk',this)">A Klasa Przeworsk</button>
+                    <button class="sub-tab" onclick="loadStats('a_jaroslaw',this)">A Klasa Jarosław</button>
+                    <button class="sub-tab" onclick="loadStats('a_rzeszow',this)">A Klasa Rzeszów</button>
+                </div>
+                <div class="sub-nav grp-b" style="display:none;">
+                    <button class="sub-tab" onclick="loadStats('b_przeworsk',this)">B Klasa Przeworsk</button>
+                    <button class="sub-tab" onclick="loadStats('b_jaroslaw',this)">B Klasa Jarosław</button>
+                    <button class="sub-tab" onclick="loadStats('b_rzeszow',this)">B Klasa Rzeszów</button>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-bottom:1.5rem;" class="anim d1">
+                <button class="btn-sm" id="btn-stat-goals" onclick="switchStatType('goals')" style="background:var(--green); color:var(--navy); font-weight:700; padding:8px 16px; border-radius:10px;"><i class="fa-solid fa-futbol"></i> Klasyfikacja Strzelców (Gole)</button>
+                <button class="btn-sm" id="btn-stat-assists" onclick="switchStatType('assists')" style="background:rgba(255,255,255,0.05); color:var(--muted); font-weight:700; padding:8px 16px; border-radius:10px;"><i class="fa-solid fa-shoe-prints"></i> Klasyfikacja Asystentów (Asysty)</button>
+            </div>
+
+            <div class="table-container anim d2">
+                <div class="table-wrap">
+                    <table>
+                        <thead id="stats-th"></thead>
+                        <tbody id="stats-tb"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="transfers" class="section">
+            <div class="sub-nav-container anim" id="transfers-sub">
+                <div class="group-toggle">
+                    <button class="grp-tab active" onclick="switchGroup('transfers', 'okr', this)">IV Liga & Okręgowe</button>
+                    <button class="grp-tab" onclick="switchGroup('transfers', 'a', this)">A Klasy</button>
+                    <button class="grp-tab" onclick="switchGroup('transfers', 'b', this)">B Klasy</button>
+                </div>
+                <div class="sub-nav grp-okr">
+                    <button class="sub-tab active" onclick="filterTransfers('all',this)">Wszystkie</button>
+                    <button class="sub-tab" onclick="filterTransfers('iv_liga',this)">IV Liga</button>
+                    <button class="sub-tab" onclick="filterTransfers('okr_jaroslaw',this)">Okr. Jarosław</button>
+                    <button class="sub-tab" onclick="filterTransfers('okr_krosno',this)">Okr. Krosno</button>
+                    <button class="sub-tab" onclick="filterTransfers('okr_rzeszow',this)">Okr. Rzeszów</button>
+                    <button class="sub-tab" onclick="filterTransfers('okr_debica',this)">Okr. Dębica</button>
+                    <button class="sub-tab" onclick="filterTransfers('okr_stalowa',this)">Okr. Stalowa Wola</button>
+                </div>
+                <div class="sub-nav grp-a" style="display:none;">
+                    <button class="sub-tab" onclick="filterTransfers('a_przeworsk',this)">A Klasa Przeworsk</button>
+                    <button class="sub-tab" onclick="filterTransfers('a_jaroslaw',this)">A Klasa Jarosław</button>
+                    <button class="sub-tab" onclick="filterTransfers('a_rzeszow',this)">A Klasa Rzeszów</button>
+                </div>
+                <div class="sub-nav grp-b" style="display:none;">
+                    <button class="sub-tab" onclick="filterTransfers('b_przeworsk',this)">B Klasa Przeworsk</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_jaroslaw',this)">B Klasa Jarosław</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_rzeszow',this)">B Klasa Rzeszów</button>
+                </div>
+            </div>
+            <h2 style="margin-bottom:2rem;text-transform:uppercase;letter-spacing:1.2px;font-size:0.82rem;color:var(--muted);" class="anim">Rynek Transferowy</h2>
+            <div id="transfers-grid" class="grid anim d1"></div>
+        </section>
+
+        <section id="streams" class="section">
+            <div class="wip-container anim">
+                <div class="wip-icon"><i class="fa-solid fa-tower-broadcast"></i></div>
+                <h2 class="wip-title">Transmisje</h2>
+                <p class="wip-text">Pracujemy nad tym, abyś mógł oglądać najlepsze spotkania z Podkarpacia bezpośrednio na naszej stronie.</p>
+                <div class="wip-badge"><i class="fa-solid fa-wrench"></i> Sekcja w trakcie prac</div>
+            </div>
+        </section>
+        
+        <section id="posts" class="section">
+            <div class="hero anim" style="padding:2.5rem 0 1.8rem;">
+                <h1 style="font-size:2.2rem;">Aktualności i <span>Posty</span></h1>
+                <p>Najważniejsze komunikaty, ogłoszenia i informacje od redakcji.</p>
+            </div>
+            <div id="posts-grid" class="grid anim d1"></div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="hero anim" style="padding:2.5rem 0 1.8rem;">
+                <h1 style="font-size:2.2rem;">Kontakt</h1>
+                <p>Masz pytania, propozycje lub chcesz zgłosić błąd? Napisz do nas.</p>
+            </div>
+            <div class="contact-grid anim d1">
+                <div class="card">
+                    <h3 style="font-size:0.95rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:1.4rem;color:var(--green);">Wyślij wiadomość</h3>
+                    <input type="text" id="c-name" placeholder="Imię i nazwisko">
+                    <input type="email" id="c-email" placeholder="Adres email">
+                    <input type="text" id="c-subject" placeholder="Temat">
+                    <textarea id="c-msg" placeholder="Treść wiadomości..."></textarea>
+                    <button class="btn" onclick="sendContact()">Wyślij wiadomość</button>
+                    <p id="c-status" style="margin-top:1rem;font-size:0.85rem;text-align:center;"></p>
+                </div>
+                <div class="contact-info">
+                    <div class="card contact-item"><i class="fa-solid fa-envelope"></i><div><h4>Email</h4><p>kontakt@strefagola.pl</p></div></div>
+                    <div class="card contact-item"><i class="fa-solid fa-location-dot"></i><div><h4>Region</h4><p>Województwo Podkarpackie<br>Jarosław, Krosno, Rzeszów, Dębica, Stalowa Wola, Przeworsk</p></div></div>
+                    <div class="card contact-item"><i class="fa-solid fa-clock"></i><div><h4>Aktualizacje</h4><p>Wyniki aktualizowane niezwłocznie po zakończeniu spotkań.<br>Tabele weryfikowane codziennie.</p></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="admin" class="section">
+            <div class="admin-box anim">
+                <div id="login-panel" class="card" style="text-align:center;">
+                    <i class="fa-solid fa-lock" style="font-size:2rem;color:var(--green);margin-bottom:1rem;"></i>
+                    <h2 style="margin-bottom:0.4rem;">Panel Redakcji</h2>
+                    <p style="color:var(--muted);margin-bottom:2rem;font-size:0.82rem;">Autoryzowany dostęp</p>
+                    <input type="email" id="l-email" placeholder="Email" value="admin@b.pl">
+                    <input type="password" id="l-pass" placeholder="Hasło">
+                    <button class="btn" onclick="login()">Autoryzacja</button>
+                    <p id="l-msg" style="margin-top:1.1rem;font-size:0.76rem;color:#ff6b6b;"></p>
+                </div>
+
+                <div id="dash" style="display:none;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:10px;">
+                        <h2 style="text-transform:uppercase;letter-spacing:1.2px;font-size:0.9rem;">Zarządzanie</h2>
+                        <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                            <button class="btn-sm" onclick="showAT('ma')" id="at-ma" style="background:var(--green-glow);color:var(--green);">Mecze</button>
+                            <button class="btn-sm" onclick="showAT('ta')" id="at-ta">Tabela</button>
+                            <button class="btn-sm" onclick="showAT('st')" id="at-st">Statystyki</button>
+                            <button class="btn-sm" onclick="showAT('tr')" id="at-tr">Transfery</button>
+                            <button class="btn-sm" onclick="showAT('za')" id="at-za">Strefy</button>
+                            <button class="btn-sm" onclick="showAT('po')" id="at-po">Posty</button>
+                            <button class="btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="ma">
+                        <div class="card" style="margin-bottom:2rem;">
+                            <h3 style="font-size:0.75rem;color:var(--green);margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:1.2px;">Dodaj / Edytuj Spotkanie</h3>
+                            <input type="hidden" id="m-id">
+                            <input type="hidden" id="m-db">
+                            <div class="form-grid">
+                                <input type="text" id="m-home" placeholder="Gospodarz">
+                                <input type="text" id="m-away" placeholder="Gość">
+                            </div>
+                            <div class="form-grid">
+                                <input type="datetime-local" id="m-date">
+                                <select id="m-league">
+                                    <option value="iv_liga">IV Liga</option>
+                                    <option value="okr_jaroslaw">Okr. Jarosław</option>
+                                    <option value="okr_krosno">Okr. Krosno</option>
+                                    <option value="okr_rzeszow">Okr. Rzeszów</option>
+                                    <option value="okr_debica">Okr. Dębica</option>
+                                    <option value="okr_stalowa">Okr. Stalowa Wola</option>
+                                    <option value="a_przeworsk">A Klasa Przeworsk</option>
+                                    <option value="b_przeworsk">B Klasa Przeworsk</option>
+                                    <option value="a_jaroslaw">A Klasa Jarosław</option>
+                                    <option value="b_jaroslaw">B Klasa Jarosław</option>
+                                    <option value="a_rzeszow">A Klasa Rzeszów</option>
+                                    <option value="b_rzeszow">B Klasa Rzeszów</option>
+                                </select>
+                            </div>
+                            <div class="form-grid">
+                                <input type="number" id="m-sh" placeholder="Bramki G (puste = nadchodzący)">
+                                <input type="number" id="m-sa" placeholder="Bramki H (puste = nadchodzący)">
+                            </div>
+                            <button class="btn" onclick="saveMatch()">Zapisz spotkanie</button>
+                            <button class="btn-sm" onclick="clearMF()" style="width:100%;margin-top:10px;border:1px solid var(--border);">Wyczyść</button>
+                        </div>
+                        <h3 style="font-size:0.75rem;color:var(--muted);margin-bottom:1.1rem;text-transform:uppercase;letter-spacing:1.2px;">Baza Spotkań</h3>
+                        <div id="admin-mlist" class="grid"></div>
+                    </div>
+
+                    <div id="ta" style="display:none;">
+                        <div class="card" style="margin-bottom:2rem;">
+                            <h3 style="font-size:0.75rem;color:var(--green);margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:1.2px;">Dodaj / Edytuj Drużynę</h3>
+                            <input type="hidden" id="t-id">
+                            <input type="hidden" id="t-old-league">
+                            <div class="form-grid">
+                                <input type="text" id="t-team" placeholder="Nazwa drużyny">
+                                <select id="t-league">
+                                    <option value="iv_liga">IV Liga</option>
+                                    <option value="okr_jaroslaw">Okr. Jarosław</option>
+                                    <option value="okr_krosno">Okr. Krosno</option>
+                                    <option value="okr_rzeszow">Okr. Rzeszów</option>
+                                    <option value="okr_debica">Okr. Dębica</option>
+                                    <option value="okr_stalowa">Okr. Stalowa Wola</option>
+                                    <option value="a_przeworsk">A Klasa Przeworsk</option>
+                                    <option value="b_przeworsk">B Klasa Przeworsk</option>
+                                    <option value="a_jaroslaw">A Klasa Jarosław</option>
+                                    <option value="b_jaroslaw">B Klasa Jarosław</option>
+                                    <option value="a_rzeszow">A Klasa Rzeszów</option>
+                                    <option value="b_rzeszow">B Klasa Rzeszów</option>
+                                </select>
+                            </div>
+                            <input type="text" id="t-crest" placeholder="URL herbu (np. https://.../herb.png)">
+                            <div class="form-grid-3">
+                                <input type="number" id="t-m" placeholder="Mecze">
+                                <input type="number" id="t-pts" placeholder="Punkty">
+                                <input type="text" id="t-diff" placeholder="Bilans (+12 lub strz-str)">
+                            </div>
+                            <button class="btn" onclick="saveTeam()">Zapisz drużynę</button>
+                            <button class="btn-sm" onclick="clearTF()" style="width:100%;margin-top:10px;border:1px solid var(--border);">Wyczyść</button>
+                        </div>
+                        <h3 style="font-size:0.75rem;color:var(--muted);margin-bottom:1.1rem;text-transform:uppercase;letter-spacing:1.2px;">Drużyny w bazie</h3>
+                        <div id="admin-tlist" class="grid"></div>
+                    </div>
+
+                    <div id="st" style="display:none;">
+                        <div class="card" style="margin-bottom:2rem;">
+                            <h3 style="font-size:0.75rem;color:var(--green);margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:1.2px;">Dodaj / Edytuj Statystyki Zawodnika</h3>
+                            <input type="hidden" id="s-id">
+                            <input type="hidden" id="s-db">
+                            <div class="form-grid">
+                                <input type="text" id="s-player" placeholder="Imię i nazwisko">
+                                <input type="text" id="s-team" placeholder="Nazwa drużyny">
+                            </div>
+                            <div class="form-grid">
+                                <select id="s-league">
+                                    <option value="iv_liga">IV Liga</option>
+                                    <option value="okr_jaroslaw">Okr. Jarosław</option>
+                                    <option value="okr_krosno">Okr. Krosno</option>
+                                    <option value="okr_rzeszow">Okr. Rzeszów</option>
+                                    <option value="okr_debica">Okr. Dębica</option>
+                                    <option value="okr_stalowa">Okr. Stalowa Wola</option>
+                                    <option value="a_przeworsk">A Klasa Przeworsk</option>
+                                    <option value="b_przeworsk">B Klasa Przeworsk</option>
+                                    <option value="a_jaroslaw">A Klasa Jarosław</option>
+                                    <option value="b_jaroslaw">B Klasa Jarosław</option>
+                                    <option value="a_rzeszow">A Klasa Rzeszów</option>
+                                    <option value="b_rzeszow">B Klasa Rzeszów</option>
+                                </select>
+                            </div>
+                            <div class="form-grid">
+                                <input type="number" id="s-goals" placeholder="Gole (np. 12)" value="0">
+                                <input type="number" id="s-assists" placeholder="Asysty (np. 5)" value="0">
+                            </div>
+                            <button class="btn" onclick="saveStat()">Zapisz statystyki</button>
+                            <button class="btn-sm" onclick="clearSF()" style="width:100%;margin-top:10px;border:1px solid var(--border);">Wyczyść</button>
+                        </div>
+                        <h3 style="font-size:0.75rem;color:var(--muted);margin-bottom:1.1rem;text-transform:uppercase;letter-spacing:1.2px;">Zawodnicy w bazie statystyk</h3>
+                        <div id="admin-slist" class="grid"></div>
+                    </div>
+
+                    <div id="tr" style="display:none;">
+                        <div class="card" style="margin-bottom:2rem;">
+                            <h3 style="font-size:0.75rem;color:var(--green);margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:1.2px;">Dodaj / Edytuj Transfer</h3>
+                            <input type="hidden" id="tr-id">
+                            <input type="hidden" id="tr-db">
+                            <div class="form-grid">
+                                <input type="text" id="tr-player" placeholder="Imię i nazwisko zawodnika">
+                                <select id="tr-league">
+                                    <option value="iv_liga">IV Liga</option>
+                                    <option value="okr_jaroslaw">Okr. Jarosław</option>
+                                    <option value="okr_krosno">Okr. Krosno</option>
+                                    <option value="okr_rzeszow">Okr. Rzeszów</option>
+                                    <option value="okr_debica">Okr. Dębica</option>
+                                    <option value="okr_stalowa">Okr. Stalowa Wola</option>
+                                    <option value="a_przeworsk">A Klasa Przeworsk</option>
+                                    <option value="b_przeworsk">B Klasa Przeworsk</option>
+                                    <option value="a_jaroslaw">A Klasa Jarosław</option>
+                                    <option value="b_jaroslaw">B Klasa Jarosław</option>
+                                    <option value="a_rzeszow">A Klasa Rzeszów</option>
+                                    <option value="b_rzeszow">B Klasa Rzeszów</option>
+                                </select>
+                            </div>
+                            <div class="form-grid-3">
+                                <input type="text" id="tr-from" placeholder="Klub oddający">
+                                <input type="text" id="tr-to" placeholder="Klub pozyskujący">
+                                <input type="text" id="tr-fee" placeholder="Kwota / Opis (Opcjonalnie)">
+                            </div>
+                            <button class="btn" onclick="saveTransfer()">Zapisz transfer</button>
+                            <button class="btn-sm" onclick="clearTrF()" style="width:100%;margin-top:10px;border:1px solid var(--border);">Wyczyść</button>
+                        </div>
+                        <h3 style="font-size:0.75rem;color:var(--muted);margin-bottom:1.1rem;text-transform:uppercase;letter-spacing:1.2px;">Historia transferów</h3>
+                        <div id="admin-trlist" class="grid"></div>
+                    </div>
+
+                    <div id="za" style="display:none;">
+                        <div class="card" style="margin-bottom:2rem;">
+                            <h3 style="font-size:0.75rem;color:var(--green);margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:1.2px;">Strefy lig</h3>
+                            <select id="z-league">
+                                <option value="iv_liga">IV Liga</option>
+                                <option value="okr_jaroslaw">Okr. Jarosław</option>
+                                <option value="okr_krosno">Okr. Krosno</option>
+                                <option value="okr_rzeszow">Okr. Rzeszów</option>
+                                <option value="okr_debica">Okr. Dębica</option>
+                                <option value="okr_stalowa">Okr. Stalowa Wola</option>
+                                <option value="a_przeworsk">A Klasa Przeworsk</option>
+                                <option value="b_przeworsk">B Klasa Przeworsk</option>
+                                <option value="a_jaroslaw">A Klasa Jarosław</option>
+                                <option value="b_jaroslaw">B Klasa Jarosław</option>
+                                <option value="a_rzeszow">A Klasa Rzeszów</option>
+                                <option value="b_rzeszow">B Klasa Rzeszów</option>
+                            </select>
+                            <div class="form-grid-3">
+                                <input type="text" id="z-promo" placeholder="Awans (np. 1)">
+                                <input type="text" id="z-barage" placeholder="Baraże (np. 2)">
+                                <input type="text" id="z-releg" placeholder="Spadek (np. 14,15,16)">
+                            </div>
+                            <button class="btn" onclick="saveZones()">Zapisz strefy</button>
+                        </div>
+                        <h3 style="font-size:0.75rem;color:var(--muted);margin-bottom:1.1rem;text-transform:uppercase;letter-spacing:1.2px;">Ustawienia stref</h3>
+                        <div id="admin-zlist" class="grid"></div>
+                    </div>
+
+                    <div id="po" style="display:none;">
+                        <div class="card" style="margin-bottom:2rem;">
+                            <h3 style="font-size:0.75rem;color:var(--green);margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:1.2px;">Dodaj / Edytuj Post</h3>
+                            <input type="hidden" id="p-id">
+                            <div class="form-grid">
+                                <input type="text" id="p-title" placeholder="Tytuł posta">
+                                <select id="p-label">
+                                    <option value="Komunikat">Komunikat</option>
+                                    <option value="Artykuł">Artykuł</option>
+                                    <option value="Wywiad">Wywiad</option>
+                                    <option value="Relacja">Relacja</option>
+                                </select>
+                            </div>
+                            <textarea id="p-content" placeholder="Treść wpisu... Możesz wklejać linki (https://...) - zostaną połączone automatycznie!"></textarea>
+                            <button class="btn" onclick="savePost()">Zapisz wpis</button>
+                            <button class="btn-sm" onclick="clearPF()" style="width:100%;margin-top:10px;border:1px solid var(--border);">Wyczyść</button>
+                        </div>
+                        <h3 style="font-size:0.75rem;color:var(--muted);margin-bottom:1.1rem;text-transform:uppercase;letter-spacing:1.2px;">Zarządzanie wpisami</h3>
+                        <div id="admin-plist" class="grid"></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <div class="logo-wrap" style="margin-bottom:0.9rem;">
+                    <img src="logo.png" alt="Logo" style="height:36px;" onerror="this.style.display='none'">
+                    <div><div class="logo-text" style="font-size:0.95rem;">Strefa<span>Gola</span></div><div class="logo-sub" style="font-size:0.52rem;">Podkarpacie</div></div>
+                </div>
+                <p style="color:var(--muted);font-size:0.82rem;max-width:260px;">Kompleksowe źródło informacji o piłce nożnej na Podkarpaciu.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Nawigacja</h4>
+                <a href="#" onclick="go('home')">Strona główna</a>
+                <a href="#" onclick="go('matches')">Rozgrywki</a>
+                <a href="#" onclick="go('table')">Tabela</a>
+                <a href="#" onclick="go('transfers')">Transfery</a>
+            </div>
+            <div class="footer-col">
+                <h4>Ligi</h4>
+                <a href="#" onclick="go('table');setTimeout(()=>loadTable('iv_liga'),100)">IV Liga</a>
+                <a href="#" onclick="go('table');setTimeout(()=>loadTable('okr_rzeszow'),100)">Okr. Rzeszów</a>
+                <a href="#" onclick="go('table');setTimeout(()=>loadTable('okr_krosno'),100)">Okr. Krosno</a>
+            </div>
+            <div class="footer-col">
+                <h4>Kontakt</h4>
+                <a href="#" onclick="go('contact')">Napisz do nas</a>
+                <a href="mailto:kontakt@strefagola.pl">kontakt@strefagola.pl</a>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2026 Strefa Gola - Podkarpacie. Wszelkie prawa zastrzeżone.</div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script>
+        // PAMIĘTAJ: Aby dane A-klas i B-klas zapisywały się w drugiej bazie danych Firebase, 
+        // musisz w pliku firebase-config.js zdefiniować zmienną window.db2!
+        
+        const db = window.db;
+        const auth = window.auth;
+
+        if(!db || !auth) {
+            console.error("Firebase nie załadowało się poprawnie z pliku firebase-config.js");
+        }
+
+        const L = {
+            iv_liga:'IV Liga Podkarpacka', okr_jaroslaw:'Klasa Okręgowa Jarosław',
+            okr_krosno:'Klasa Okręgowa Krosno', okr_rzeszow:'Klasa Okręgowa Rzeszów',
+            okr_debica:'Klasa Okręgowa Dębica', okr_stalowa:'Klasa Okręgowa Stalowa Wola',
+            a_przeworsk:'A Klasa Przeworsk', b_przeworsk:'B Klasa Przeworsk',
+            a_jaroslaw:'A Klasa Jarosław', b_jaroslaw:'B Klasa Jarosław',
+            a_rzeszow:'A Klasa Rzeszów', b_rzeszow:'B Klasa Rzeszów'
+        };
+        
+        const NEW_LEAGUES = ['a_przeworsk', 'b_przeworsk', 'a_jaroslaw', 'b_jaroslaw', 'a_rzeszow', 'b_rzeszow'];
+        function getDB(league) {
+            if(league && NEW_LEAGUES.includes(league) && window.db2) return window.db2;
+            return window.db;
+        }
+
+        const DEFAULT_ZONES = { promo:[1], barage:[2], releg:[14,15,16] };
+
+        document.addEventListener('keydown', e => {
+            if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='m'){ e.preventDefault(); go('admin'); }
+        });
+
+        let tapCount = 0;
+        let tapTimer;
+        document.getElementById('mobile-admin-trigger').addEventListener('click', () => {
+            tapCount++;
+            clearTimeout(tapTimer);
+            if(tapCount >= 5) { tapCount = 0; go('admin'); }
+            tapTimer = setTimeout(() => { tapCount = 0; }, 1500);
+        });
+
+        function switchGroup(sectionId, grp, btn) {
+            const wrap = document.getElementById(sectionId + '-sub');
+            if(!wrap) return;
+            wrap.querySelectorAll('.grp-tab').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            
+            wrap.querySelectorAll('.grp-okr, .grp-a, .grp-b').forEach(el => el.style.display = 'none');
+            const target = wrap.querySelector('.grp-' + grp);
+            if(target) {
+                target.style.display = 'flex';
+                const firstSubTab = target.querySelector('.sub-tab');
+                if(firstSubTab) firstSubTab.click();
+            }
+        }
+
+        function go(id){
+            document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            const map=['home','matches','table','stats','transfers','streams','posts','contact','admin'];
+            const idx=map.indexOf(id);
+            if(idx>=0&&idx<8) document.querySelectorAll('.tab')[idx].classList.add('active');
+            document.querySelectorAll('.bottom-tab').forEach(b=>b.classList.toggle('active', b.dataset.section===id));
+            const sec=document.getElementById(id);
+            sec.querySelectorAll('.anim').forEach(el=>{el.style.animation='none';el.offsetHeight;el.style.animation=null;});
+            window.scrollTo({top:0,behavior:'smooth'});
+            
+            if(id==='home'){ refreshMatches(); loadHomeTable(); }
+            if(id==='matches') refreshMatches();
+            if(id==='table') loadTable('iv_liga');
+            if(id==='stats') loadStats('iv_liga');
+            if(id==='transfers') loadTransfers();
+            if(id==='posts') loadPosts();
+        }
+
+        let crestsCache={};
+        async function loadCrests(){
+            crestsCache={};
+            for(const league of Object.keys(L)){
+                try{
+                    const dbase = getDB(league);
+                    const doc=await dbase.collection('standings').doc(league).get();
+                    if(doc.exists&&doc.data().teams) doc.data().teams.forEach(t=>{ if(t.name&&t.crest) crestsCache[t.name.trim()]=t.crest; });
+                }catch(e){}
+            }
+        }
+        function crestImg(name){
+            const c=crestsCache[(name||'').trim()];
+            return c ? `<img src="${c}" class="team-crest" alt="">` : '<div class="team-crest" style="display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>';
+        }
+        function crestImgSmallFromStr(name){
+            const c=crestsCache[(name||'').trim()];
+            return c ? `<img src="${c}" class="table-crest" alt="">` : '<div class="table-crest" style="display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>';
+        }
+        function crestImgSmall(t){
+            return t.crest ? `<img src="${t.crest}" class="table-crest" alt="">` : '<div class="table-crest" style="display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>';
+        }
+
+        function evalGoalDiff(d){
+            if(!d) return 0;
+            let str = String(d).trim().replace(/\s/g,'');
+            if(str.includes('-') && !str.startsWith('-')){
+                let parts = str.split('-');
+                if(parts.length===2 && parts[0]!=='' && parts[1]!==''){
+                    let scored = parseInt(parts[0].replace(/[^\d]/g,''))||0;
+                    let conceded = parseInt(parts[1].replace(/[^\d]/g,''))||0;
+                    return scored - conceded;
+                }
+            }
+            return parseInt(str) || 0;
+        }
+
+        let zonesCache={};
+        async function loadZones(){
+            zonesCache={};
+            for(const league of Object.keys(L)){
+                try{
+                    const dbase = getDB(league);
+                    const doc=await dbase.collection('zones').doc(league).get();
+                    if(doc.exists) zonesCache[league]=doc.data();
+                }catch(e){}
+            }
+        }
+        function getZones(league){ return zonesCache[league] || DEFAULT_ZONES; }
+        function parsePositions(str){ return (str||'').split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)&&n>0); }
+        function getRowClass(pos,league){
+            const z=getZones(league);
+            if((z.promo||[]).includes(pos)) return 'row-promo';
+            if((z.barage||[]).includes(pos)) return 'row-barage';
+            if((z.releg||[]).includes(pos)) return 'row-releg';
+            return '';
+        }
+        function renderLegend(league,cid){
+            const z=getZones(league);
+            const el=document.getElementById(cid);
+            let html='';
+            if((z.promo||[]).length) html+=`<div class="legend-item"><div class="legend-dot dot-promo"></div> Awans (${z.promo.join(', ')})</div>`;
+            if((z.barage||[]).length) html+=`<div class="legend-item"><div class="legend-dot dot-barage"></div> Baraże (${z.barage.join(', ')})</div>`;
+            if((z.releg||[]).length) html+=`<div class="legend-item"><div class="legend-dot dot-releg"></div> Spadek (${z.releg.join(', ')})</div>`;
+            el.innerHTML=html||'<div class="legend-item">Brak stref</div>';
+        }
+
+        let mc=[], curFilter='all', curMatchType='all';
+        function matchIsUpcoming(m){ return (m.status==='upcoming' || (m.scoreHome==null||m.scoreAway==null)) && m.status!=='finished'; }
+        function upcomingList(list){ return list.filter(matchIsUpcoming).sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0)); }
+        function finishedList(list){ return list.filter(m=>!matchIsUpcoming(m)).sort((a,b)=>(b.date?.seconds||0)-(a.date?.seconds||0)); }
+
+        const DAYS=['niedziela','poniedziałek','wtorek','środa','czwartek','piątek','sobota'];
+        function fmtUpcoming(ts){
+            if(!ts) return 'Termin wkrótce';
+            const d=new Date(ts.seconds*1000), pad=n=>String(n).padStart(2,'0');
+            return `<i class="fa-regular fa-clock"></i> ${DAYS[d.getDay()]}, ${pad(d.getDate())}.${pad(d.getMonth()+1)} • ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        }
+        function fmtFinished(ts){
+            if(!ts) return '';
+            return new Date(ts.seconds*1000).toLocaleDateString('pl-PL',{day:'numeric',month:'long',year:'numeric'});
+        }
+        function toLocalInput(ts){
+            if(!ts) return '';
+            const d=new Date(ts.seconds*1000), pad=n=>String(n).padStart(2,'0');
+            return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        }
+
+        async function refreshMatches(){
+            const c1=document.getElementById('home-upcoming');
+            if(!c1) return;
+            try{
+                await loadCrests();
+                const s1 = await window.db.collection('matches').orderBy('date','asc').limit(500).get();
+                let allM = s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
+                if (window.db2) {
+                    try {
+                        const s2 = await window.db2.collection('matches').orderBy('date','asc').limit(500).get();
+                        allM = allM.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
+                    } catch(e) {}
+                }
+                allM.sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0));
+                mc = allM;
+                renderGrid(upcomingList(mc).slice(0,6),'home-upcoming');
+                renderGrid(finishedList(mc).slice(0,6),'home-grid');
+                applyFilter();
+            }catch(e){ c1.innerHTML='<p style="color:#ff6b6b;">Błąd bazy.</p>'; }
+        }
+
+        function matchCard(m){
+            const up=matchIsUpcoming(m);
+            return `<div class="card">
+                <div class="league-label"><i class="fa-solid fa-circle"></i>${L[m.league]||m.league}${up?'<span class="badge-up">Nadchodzący</span>':''}</div>
+                <div class="match-row">
+                    <div class="team-wrap">${crestImg(m.homeTeam)}<span class="team-name" onclick="openClubProfile('${m.homeTeam}')">${m.homeTeam||'?'}</span></div>
+                    <div class="score-box ${up?'vs':''}">${up?'vs':`${m.scoreHome??'-'}:${m.scoreAway??'-'}`}</div>
+                    <div class="team-wrap away"><span class="team-name" onclick="openClubProfile('${m.awayTeam}')">${m.awayTeam||'?'}</span>${crestImg(m.awayTeam)}</div>
+                </div>
+                <div class="match-date ${up?'up':''}">${up?fmtUpcoming(m.date):fmtFinished(m.date)}</div>
+            </div>`;
+        }
+
+        function renderGrid(data,cid){
+            const c=document.getElementById(cid);
+            if(c) c.innerHTML = data.length ? data.map(matchCard).join('') : '<p style="color:var(--muted);text-align:center;padding:1.5rem;">Brak danych.</p>';
+        }
+
+        function setMatchType(type) {
+            curMatchType = type;
+            ['all', 'upcoming', 'results'].forEach(t => {
+                const btn = document.getElementById('btn-match-' + (t==='upcoming'?'up':t==='results'?'res':'all'));
+                if(btn) {
+                    if(t === type) {
+                        btn.style.background = 'var(--green)';
+                        btn.style.color = 'var(--navy)';
+                    } else {
+                        btn.style.background = 'rgba(255,255,255,0.05)';
+                        btn.style.color = 'var(--muted)';
+                    }
+                }
+            });
+            applyFilter();
+        }
+
+        function applyFilter(){
+            const list = curFilter==='all' ? mc : mc.filter(m=>m.league===curFilter);
+            const upTitle = document.getElementById('title-upcoming');
+            const resTitle = document.getElementById('title-results');
+            const upGrid = document.getElementById('upcoming-grid');
+            const resGrid = document.getElementById('results-grid');
+
+            if(curMatchType === 'all') {
+                if(upTitle) upTitle.style.display = 'block';
+                if(upGrid) upGrid.style.display = 'grid';
+                if(resTitle) resTitle.style.display = 'block';
+                if(resGrid) resGrid.style.display = 'grid';
+                renderGrid(upcomingList(list),'upcoming-grid');
+                renderGrid(finishedList(list),'results-grid');
+            } else if(curMatchType === 'upcoming') {
+                if(upTitle) upTitle.style.display = 'block';
+                if(upGrid) upGrid.style.display = 'grid';
+                if(resTitle) resTitle.style.display = 'none';
+                if(resGrid) resGrid.style.display = 'none';
+                renderGrid(upcomingList(list),'upcoming-grid');
+            } else if(curMatchType === 'results') {
+                if(upTitle) upTitle.style.display = 'none';
+                if(upGrid) upGrid.style.display = 'none';
+                if(resTitle) resTitle.style.display = 'block';
+                if(resGrid) resGrid.style.display = 'grid';
+                renderGrid(finishedList(list),'results-grid');
+            }
+        }
+
+        function filterM(league,btn){
+            curFilter=league;
+            document.querySelectorAll('#matches-sub .sub-tab').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            applyFilter();
+        }
+
+        async function loadTable(league,btn){
+            if(btn){document.querySelectorAll('#table-sub .sub-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+            const tb=document.getElementById('tb');
+            tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem;">Ładowanie...</td></tr>';
+            try{
+                await loadZones();
+                const dbase = getDB(league);
+                const doc=await dbase.collection('standings').doc(league).get();
+                if(!doc.exists||!doc.data().teams||!doc.data().teams.length){
+                    tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem;">Brak danych w lidze.</td></tr>';
+                    renderLegend(league,'table-legend'); return;
+                }
+                const teams=doc.data().teams.sort((a,b)=>b.pts-a.pts||evalGoalDiff(b.diff)-evalGoalDiff(a.diff));
+                tb.innerHTML=teams.map((t,i)=>`
+                    <tr class="${getRowClass(i+1,league)}">
+                        <td class="${i<3?'top-pos':''}">${i+1}</td>
+                        <td><div class="team-cell">${crestImgSmall(t)}<span class="team-name" onclick="openClubProfile('${t.name}')" style="font-weight:600;">${t.name}</span></div></td>
+                        <td style="color:var(--muted)">${t.m}</td>
+                        <td style="font-weight:800;color:var(--green);">${t.pts}</td>
+                        <td style="color:var(--muted);font-size:0.8rem;">${t.diff}</td>
+                    </tr>`).join('');
+                renderLegend(league,'table-legend');
+            }catch(e){tb.innerHTML=`<tr><td colspan="5" style="text-align:center;color:#ff6b6b;padding:2rem;">Błąd bazy</td></tr>`;}
+        }
+
+        async function loadHomeTable(){
+            const tb=document.getElementById('home-tb');
+            try{
+                await loadZones();
+                const doc=await window.db.collection('standings').doc('iv_liga').get();
+                if(!doc.exists||!doc.data().teams) return;
+                const all=doc.data().teams.sort((a,b)=>b.pts-a.pts||evalGoalDiff(b.diff)-evalGoalDiff(a.diff));
+                tb.innerHTML=all.slice(0,5).map((t,i)=>`
+                    <tr class="${getRowClass(i+1,'iv_liga')}">
+                        <td class="${i<3?'top-pos':''}">${i+1}</td>
+                        <td><div class="team-cell">${crestImgSmall(t)}<span class="team-name" onclick="openClubProfile('${t.name}')" style="font-weight:600;">${t.name}</span></div></td>
+                        <td style="color:var(--muted)">${t.m}</td>
+                        <td style="font-weight:800;color:var(--green);">${t.pts}</td>
+                        <td style="color:var(--muted);font-size:0.8rem;">${t.diff}</td>
+                    </tr>`).join('');
+                renderLegend('iv_liga','home-legend');
+            }catch(e){}
+        }
+
+        let currentStatLeague = 'iv_liga';
+        let currentStatType = 'goals';
+        let cachedStats = [];
+
+        function switchStatType(type) {
+            currentStatType = type;
+            const btnG = document.getElementById('btn-stat-goals');
+            const btnA = document.getElementById('btn-stat-assists');
+            if(type === 'goals') {
+                btnG.style.background = 'var(--green)';
+                btnG.style.color = 'var(--navy)';
+                btnA.style.background = 'rgba(255,255,255,0.05)';
+                btnA.style.color = 'var(--muted)';
+            } else {
+                btnA.style.background = 'var(--gold)';
+                btnA.style.color = 'var(--navy)';
+                btnG.style.background = 'rgba(255,255,255,0.05)';
+                btnG.style.color = 'var(--muted)';
+            }
+            renderStatsTable();
+        }
+
+        async function loadStats(league, btn){
+            if(btn){
+                document.querySelectorAll('#stats-sub .sub-tab').forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            currentStatLeague = league;
+            const tb = document.getElementById('stats-tb');
+            tb.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">Ładowanie...</td></tr>';
+            try {
+                const dbase = getDB(league);
+                const s = await dbase.collection('stats').where('league', '==', league).get();
+                cachedStats = s.empty ? [] : s.docs.map(d=>d.data());
+                renderStatsTable();
+            } catch(e) {
+                tb.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#ff6b6b;padding:2rem;">Błąd ładowania statystyk.</td></tr>';
+            }
+        }
+
+        function renderStatsTable() {
+            const th = document.getElementById('stats-th');
+            const tb = document.getElementById('stats-tb');
+            
+            if(currentStatType === 'goals') {
+                th.innerHTML = `<tr><th>#</th><th>Zawodnik</th><th>Klub</th><th style="text-align:center;"><i class="fa-solid fa-futbol" style="color:var(--green)"></i> Bramki</th></tr>`;
+                const sorted = [...cachedStats].filter(s => (s.goals || 0) > 0).sort((a,b) => (b.goals||0) - (a.goals||0));
+                if(!sorted.length) {
+                    tb.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">Brak wpisów w klasyfikacji strzelców.</td></tr>';
+                    return;
+                }
+                tb.innerHTML = sorted.map((st, i) => `
+                    <tr>
+                        <td style="color:var(--muted); font-weight:800;">${i+1}</td>
+                        <td style="font-weight:600;">${st.player}</td>
+                        <td style="color:var(--muted); font-size:0.8rem;"><div class="team-cell">${crestImgSmallFromStr(st.team)} <span class="team-name" onclick="openClubProfile('${st.team}')">${st.team}</span></div></td>
+                        <td style="font-weight:800; color:var(--green); font-size:1.15rem; text-align:center;">${st.goals||0}</td>
+                    </tr>
+                `).join('');
+            } else {
+                th.innerHTML = `<tr><th>#</th><th>Zawodnik</th><th>Klub</th><th style="text-align:center;"><i class="fa-solid fa-shoe-prints" style="color:var(--gold)"></i> Asysty</th></tr>`;
+                const sorted = [...cachedStats].filter(s => (s.assists || 0) > 0).sort((a,b) => (b.assists||0) - (a.assists||0));
+                if(!sorted.length) {
+                    tb.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">Brak wpisów w klasyfikacji asystentów.</td></tr>';
+                    return;
+                }
+                tb.innerHTML = sorted.map((st, i) => `
+                    <tr>
+                        <td style="color:var(--muted); font-weight:800;">${i+1}</td>
+                        <td style="font-weight:600;">${st.player}</td>
+                        <td style="color:var(--muted); font-size:0.8rem;"><div class="team-cell">${crestImgSmallFromStr(st.team)} <span class="team-name" onclick="openClubProfile('${st.team}')">${st.team}</span></div></td>
+                        <td style="font-weight:800; color:var(--gold); font-size:1.15rem; text-align:center;">${st.assists||0}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        let allTransfers = [];
+        async function loadTransfers(){
+            const c=document.getElementById('transfers-grid');
+            try{
+                const s1 = await window.db.collection('transfers').orderBy('date','desc').limit(150).get();
+                let allT = s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
+                if (window.db2) {
+                    try {
+                        const s2 = await window.db2.collection('transfers').orderBy('date','desc').limit(150).get();
+                        allT = allT.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
+                    } catch(e) {}
+                }
+                allT.sort((a,b)=>(b.date?.seconds||0)-(a.date?.seconds||0));
+                allTransfers = allT;
+                if(allTransfers.length===0){c.innerHTML='<p style="color:var(--muted);padding:2rem;">Brak transferów.</p>';return;}
+                renderTransfers('all');
+            }catch(e){ c.innerHTML='<p style="color:#ff6b6b;padding:2rem;">Błąd ładowania.</p>'; }
+        }
+        function filterTransfers(league, btn){
+            if(btn){document.querySelectorAll('#transfers-sub .sub-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+            renderTransfers(league);
+        }
+        function renderTransfers(league){
+            const c=document.getElementById('transfers-grid');
+            let list = league === 'all' ? allTransfers : allTransfers.filter(t=>t.league === league);
+            
+            if(list.length === 0){
+                c.innerHTML='<p style="color:var(--muted);padding:2rem;">Brak transferów w tej lidze.</p>';
+                return;
+            }
+
+            c.innerHTML = list.map(t=>{
+                return `<div class="card">
+                    <div class="league-label"><i class="fa-solid fa-circle"></i>${L[t.league]||'Transfer'}</div>
+                    <h3 style="font-size:1.02rem;margin-bottom:0.8rem;">${t.player}</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:10px; border-radius:10px;">
+                        <div style="text-align:center;">${crestImgSmallFromStr(t.from)}<div style="font-size:0.75rem; color:var(--muted); margin-top:4px;">${t.from}</div></div>
+                        <i class="fa-solid fa-arrow-right-long" style="color:var(--green);"></i>
+                        <div style="text-align:center;">${crestImgSmallFromStr(t.to)}<div style="font-size:0.75rem; color:var(--white); font-weight:600; margin-top:4px;">${t.to}</div></div>
+                    </div>
+                    ${t.fee ? `<div style="color:var(--gold);font-weight:700;margin-top:0.7rem;font-size:0.82rem;text-align:center;">${t.fee}</div>` : ''}
+                </div>`;
+            }).join('');
+        }
+
+        let postsCache = [];
+
+        function parseLinks(text) {
+            if(!text) return '';
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:var(--green); font-weight:600; text-decoration:underline;" onclick="event.stopPropagation();">${url}</a>`;
+            });
+        }
+
+        async function loadPosts(){
+            const c=document.getElementById('posts-grid');
+            try{
+                const s=await window.db.collection('posts').orderBy('date','desc').limit(20).get();
+                if(s.empty){c.innerHTML='<p style="color:var(--muted);padding:2rem;">Brak postów.</p>';return;}
+                postsCache = s.docs.map(d=>({id:d.id, ...d.data()}));
+                
+                c.innerHTML=postsCache.map((p, idx)=>{
+                    return `<div class="card" onclick="openPostModal(${idx})" style="cursor:pointer;">
+                        <div class="league-label"><i class="fa-solid fa-bullhorn"></i> ${p.label||'Informacja'}</div>
+                        <h3 style="font-size:1.05rem;margin-bottom:0.5rem;color:var(--white);">${p.title}</h3>
+                        <p style="color:var(--muted);font-size:0.88rem;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;">${parseLinks(p.content)}</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.2rem;">
+                            <span class="match-date" style="text-align:left;margin-top:0;"><i class="fa-regular fa-clock"></i> ${fmtFinished(p.date)}</span>
+                            <span style="font-size:0.75rem; color:var(--green); font-weight:600;">Czytaj więcej <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>`;
+                }).join('');
+            }catch(e){ c.innerHTML='<p style="color:#ff6b6b;padding:2rem;">Błąd ładowania.</p>'; }
+        }
+
+        function openPostModal(index) {
+            const p = postsCache[index];
+            if(!p) return;
+            const body = document.getElementById('post-modal-body');
+            body.innerHTML = `
+                <div class="league-label" style="margin-bottom:0.8rem;"><i class="fa-solid fa-bullhorn"></i> ${p.label||'Informacja'}</div>
+                <h2 style="font-family:'Outfit'; font-size:1.6rem; color:var(--white); margin-bottom:1rem;">${p.title}</h2>
+                <div style="font-size:0.75rem; color:var(--muted); margin-bottom:1.5rem; border-bottom:1px solid var(--border); padding-bottom:10px;">
+                    <i class="fa-regular fa-clock"></i> Opublikowano: ${fmtFinished(p.date)}
+                </div>
+                <div style="color:var(--white); font-size:0.95rem; line-height:1.7; white-space:pre-wrap; overflow-wrap:break-word;">${parseLinks(p.content)}</div>
+            `;
+            document.getElementById('post-modal').classList.add('active');
+        }
+
+        function closePostModal() {
+            document.getElementById('post-modal').classList.remove('active');
+        }
+
+        function openClubProfile(teamName) {
+            if(!teamName) return;
+            const modal = document.getElementById('club-modal');
+            const c = crestsCache[teamName.trim()];
+            
+            document.getElementById('modal-crest-container').innerHTML = c 
+                ? `<img src="${c}" class="modal-crest" alt="">` 
+                : `<div class="modal-crest" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>`;
+            
+            document.getElementById('modal-team-name').innerText = teamName;
+
+            const targetName = teamName.trim().toLowerCase();
+            let teamMatches = mc.filter(m => 
+                (m.homeTeam && m.homeTeam.trim().toLowerCase() === targetName) || 
+                (m.awayTeam && m.awayTeam.trim().toLowerCase() === targetName)
+            );
+
+            let upList = upcomingList(teamMatches);
+            let finList = finishedList(teamMatches);
+
+            renderGrid(upList, 'modal-upcoming');
+            renderGrid(finList, 'modal-results');
+
+            switchModalMatches('up');
+            modal.classList.add('active');
+        }
+
+        function switchModalMatches(type) {
+            const upEl = document.getElementById('modal-upcoming');
+            const resEl = document.getElementById('modal-results');
+            const tabUp = document.getElementById('modal-tab-up');
+            const tabRes = document.getElementById('modal-tab-res');
+
+            if(type === 'up') {
+                upEl.style.display = 'grid';
+                resEl.style.display = 'none';
+                tabUp.style.background = 'var(--green)';
+                tabUp.style.color = 'var(--navy)';
+                tabRes.style.background = 'rgba(255,255,255,0.05)';
+                tabRes.style.color = 'var(--muted)';
+            } else {
+                upEl.style.display = 'none';
+                resEl.style.display = 'grid';
+                tabRes.style.background = 'var(--green)';
+                tabRes.style.color = 'var(--navy)';
+                tabUp.style.background = 'rgba(255,255,255,0.05)';
+                tabUp.style.color = 'var(--muted)';
+            }
+        }
+
+        function closeClubProfile() {
+            document.getElementById('club-modal').classList.remove('active');
+        }
+
+        async function sendContact(){
+            const name=document.getElementById('c-name').value, email=document.getElementById('c-email').value;
+            const subject=document.getElementById('c-subject').value, msg=document.getElementById('c-msg').value;
+            const status=document.getElementById('c-status');
+            if(!name||!email||!msg){status.style.color='#ff6b6b';status.innerText='Wypełnij wymagane pola.';return;}
+            try{
+                await window.db.collection('messages').add({name,email,subject,message:msg,date:firebase.firestore.FieldValue.serverTimestamp(),read:false});
+                status.style.color='var(--green)';status.innerText='✅ Wiadomość wysłana! Dziękujemy.';
+                ['c-name','c-email','c-subject','c-msg'].forEach(i=>document.getElementById(i).value='');
+            }catch(e){status.style.color='#ff6b6b';status.innerText='Błąd wysyłania.';}
+        }
+
+        let user=null;
+        auth.onAuthStateChanged(async u=>{
+            if(u){
+                user=u;
+                document.getElementById('login-panel').style.display='none';
+                document.getElementById('dash').style.display='block';
+                await loadZones();
+                loadAdminM(); loadAdminT(); loadAdminZ(); loadAdminP(); loadAdminTr(); loadAdminS();
+            }else{
+                user=null;
+                document.getElementById('login-panel').style.display='block';
+                document.getElementById('dash').style.display='none';
+            }
+        });
+        async function login(){
+            try{await auth.signInWithEmailAndPassword(document.getElementById('l-email').value,document.getElementById('l-pass').value);}
+            catch(e){document.getElementById('l-msg').innerText='Błędne dane logowania';}
+        }
+        function logout(){auth.signOut();go('home');}
+
+        function showAT(tab){
+            ['ma','ta','st','za','po','tr'].forEach(t=>{
+                document.getElementById(t).style.display=(t===tab)?'block':'none';
+                const b=document.getElementById('at-'+t);
+                b.style.background=(t===tab)?'var(--green-glow)':'transparent';
+                b.style.color=(t===tab)?'var(--green)':'var(--muted)';
+            });
+        }
+
+        async function saveMatch(){
+            if(!user)return;
+            const id=document.getElementById('m-id').value;
+            const sh=document.getElementById('m-sh').value, sa=document.getElementById('m-sa').value;
+            const hasScore = sh!=='' && sa!=='';
+            const dateVal=document.getElementById('m-date').value;
+            const newLeague = document.getElementById('m-league').value;
+            const data={
+                homeTeam:document.getElementById('m-home').value,
+                awayTeam:document.getElementById('m-away').value,
+                scoreHome:hasScore?parseInt(sh):null,
+                scoreAway:hasScore?parseInt(sa):null,
+                status:hasScore?'finished':'upcoming',
+                league:newLeague,
+                date:dateVal?firebase.firestore.Timestamp.fromDate(new Date(dateVal)):firebase.firestore.FieldValue.serverTimestamp()
+            };
+            try{
+                const newDbase = getDB(newLeague);
+                const oldDbVal = document.getElementById('m-db').value;
+                const oldDbase = oldDbVal === 'db2' ? window.db2 : window.db;
+
+                if(id){
+                    if(oldDbase && oldDbase !== newDbase) {
+                        await oldDbase.collection('matches').doc(id).delete();
+                        await newDbase.collection('matches').doc(id).set(data);
+                    } else {
+                        await newDbase.collection('matches').doc(id).update(data);
+                    }
+                } else {
+                    await newDbase.collection('matches').add(data);
+                }
+                clearMF();loadAdminM();
+            }catch(e){alert('Błąd zapisu spotkania');}
+        }
+        
+        async function loadAdminM(){
+            const s1=await window.db.collection('matches').orderBy('date','asc').limit(200).get();
+            let all=s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
+            if(window.db2){
+                try {
+                    const s2=await window.db2.collection('matches').orderBy('date','asc').limit(200).get();
+                    all=all.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
+                } catch(e) {}
+            }
+            const sorted=[...upcomingList(all),...finishedList(all)];
+            document.getElementById('admin-mlist').innerHTML=sorted.map(m=>`
+                <div class="card" style="padding:0.9rem;display:flex;justify-content:space-between;align-items:center;">
+                    <div><div style="font-weight:600;font-size:0.9rem;">${m.homeTeam} vs ${m.awayTeam}</div>
+                    <div style="font-size:0.72rem;color:var(--muted);">${L[m.league]} • ${matchIsUpcoming(m)?'Nadchodzący':`Wynik ${m.scoreHome}:${m.scoreAway}`}</div></div>
+                    <div style="display:flex;gap:4px;"><button class="btn-sm" onclick='editM("${m.id}",${JSON.stringify(m).replace(/'/g,"&#39;")})'><i class="fa-solid fa-pen"></i></button><button class="btn-sm btn-del" onclick="delM('${m.id}', '${m._db}')"><i class="fa-solid fa-trash"></i></button></div>
+                </div>`).join('')||'<p style="color:var(--muted);">Brak spotkań.</p>';
+        }
+        function editM(id,d){
+            document.getElementById('m-id').value=id; document.getElementById('m-db').value=d._db||'db1';
+            document.getElementById('m-home').value=d.homeTeam; document.getElementById('m-away').value=d.awayTeam; 
+            document.getElementById('m-sh').value=d.scoreHome??''; document.getElementById('m-sa').value=d.scoreAway??''; 
+            document.getElementById('m-league').value=d.league; document.getElementById('m-date').value=toLocalInput(d.date); 
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
+        async function delM(id, dbVal){
+            if(confirm('Usunąć?')){
+                const dbase = (dbVal==='db2' && window.db2) ? window.db2 : window.db;
+                await dbase.collection('matches').doc(id).delete();
+                loadAdminM();
+            }
+        }
+        function clearMF(){document.getElementById('m-id').value=''; document.getElementById('m-db').value='';['m-home','m-away','m-sh','m-sa','m-date'].forEach(i=>document.getElementById(i).value='');}
+
+        async function saveTeam(){
+            if(!user) return;
+            const editId = document.getElementById('t-id').value;
+            const oldLeague = document.getElementById('t-old-league').value;
+            const newLeague = document.getElementById('t-league').value;
+
+            const teamData = {
+                name: document.getElementById('t-team').value.trim(),
+                crest: document.getElementById('t-crest').value.trim() || '',
+                m: parseInt(document.getElementById('t-m').value) || 0,
+                pts: parseInt(document.getElementById('t-pts').value) || 0,
+                diff: document.getElementById('t-diff').value.trim() || '0'
+            };
+
+            if(!teamData.name) { alert('Podaj nazwę drużyny.'); return; }
+
+            try {
+                if(editId !== '') {
+                    const idx = parseInt(editId);
+                    if(oldLeague === newLeague) {
+                        const ref = getDB(newLeague).collection('standings').doc(newLeague);
+                        const doc = await ref.get();
+                        let teams = (doc.exists && doc.data().teams) ? [...doc.data().teams] : [];
+                        if(idx >= 0 && idx < teams.length) {
+                            teams[idx] = teamData;
+                        } else {
+                            teams.push(teamData);
+                        }
+                        await ref.set({teams, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}, {merge: true});
+                    } else {
+                        if(oldLeague) {
+                            const oldRef = getDB(oldLeague).collection('standings').doc(oldLeague);
+                            const oldDoc = await oldRef.get();
+                            if(oldDoc.exists && oldDoc.data().teams) {
+                                let oldTeams = [...oldDoc.data().teams];
+                                if(idx >= 0 && idx < oldTeams.length) {
+                                    oldTeams.splice(idx, 1);
+                                    await oldRef.set({teams: oldTeams, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}, {merge: true});
+                                }
+                            }
+                        }
+                        const newRef = getDB(newLeague).collection('standings').doc(newLeague);
+                        const newDoc = await newRef.get();
+                        let newTeams = (newDoc.exists && newDoc.data().teams) ? [...newDoc.data().teams] : [];
+                        newTeams.push(teamData);
+                        await newRef.set({teams: newTeams, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}, {merge: true});
+                    }
+                } else {
+                    const ref = getDB(newLeague).collection('standings').doc(newLeague);
+                    const doc = await ref.get();
+                    let teams = (doc.exists && doc.data().teams) ? [...doc.data().teams] : [];
+                    teams.push(teamData);
+                    await ref.set({teams, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}, {merge: true});
+                }
+                clearTF();
+                loadAdminT();
+            } catch(e) {
+                alert('Błąd podczas zapisywania drużyny');
+            }
+        }
+
+        async function loadAdminT(){
+            let html='';
+            for(const league of Object.keys(L)){
+                const dbase = getDB(league);
+                const doc=await dbase.collection('standings').doc(league).get();
+                if(!doc.exists||!doc.data().teams||!doc.data().teams.length) continue;
+                html+=`<div style="margin-bottom:1.4rem;"><div class="league-label" style="margin-bottom:0.8rem;"><i class="fa-solid fa-circle"></i>${L[league]}</div>`;
+                const teams = doc.data().teams;
+                html+=teams.map((t, idx)=>`<div class="card" style="padding:0.8rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+                    <div style="display:flex;align-items:center;gap:8px;">${crestImgSmall(t)} <span style="font-weight:600;font-size:0.9rem;">${t.name}</span></div>
+                    <div style="display:flex;gap:4px;"><button class="btn-sm" onclick='editT("${league}", ${idx}, ${JSON.stringify(t).replace(/'/g,"&#39;")})'><i class="fa-solid fa-pen"></i></button><button class="btn-sm btn-del" onclick="delT('${league}', ${idx})"><i class="fa-solid fa-trash"></i></button></div>
+                </div>`).join('');
+                html += `</div>`;
+            }
+            document.getElementById('admin-tlist').innerHTML = html || '<p style="color:var(--muted);">Brak drużyn.</p>';
+        }
+
+        function editT(league, idx, t){
+            document.getElementById('t-id').value = idx;
+            document.getElementById('t-old-league').value = league;
+            document.getElementById('t-team').value = t.name;
+            document.getElementById('t-league').value = league;
+            document.getElementById('t-crest').value = t.crest || '';
+            document.getElementById('t-m').value = t.m || 0;
+            document.getElementById('t-pts').value = t.pts || 0;
+            document.getElementById('t-diff').value = t.diff || '0';
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
+
+        async function delT(league, idx){
+            if(confirm('Na pewno usunąć tę drużynę?')){
+                const ref = getDB(league).collection('standings').doc(league);
+                const doc = await ref.get();
+                if(doc.exists && doc.data().teams){
+                    let teams = [...doc.data().teams];
+                    teams.splice(idx, 1);
+                    await ref.set({teams, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}, {merge:true});
+                    loadAdminT();
+                }
+            }
+        }
+
+        function clearTF(){
+            document.getElementById('t-id').value=''; document.getElementById('t-old-league').value='';
+            ['t-team','t-crest','t-m','t-pts','t-diff'].forEach(i=>document.getElementById(i).value='');
+        }
+
+        /* --- NAPRAWIONE FUNKCJE ZARZĄDZANIA (STREFY, TRANSFERY, STATYSTYKI, POSTY) --- */
+        
+        async function saveZones(){
+            if(!user) return;
+            const league = document.getElementById('z-league').value;
+            const data = {
+                promo: parsePositions(document.getElementById('z-promo').value),
+                barage: parsePositions(document.getElementById('z-barage').value),
+                releg: parsePositions(document.getElementById('z-releg').value)
+            };
+            try {
+                const dbase = getDB(league);
+                await dbase.collection('zones').doc(league).set(data);
+                loadAdminZ();
+                alert('Strefy ligi zostały zapisane!');
+            } catch(e) { alert('Błąd zapisu stref.'); }
+        }
+
+        async function loadAdminZ(){
+            let html='';
+            for(const league of Object.keys(L)){
+                try {
+                    const dbase = getDB(league);
+                    const doc = await dbase.collection('zones').doc(league).get();
+                    if(doc.exists){
+                        const z = doc.data();
+                        html+=`<div class="card" style="padding:0.9rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+                            <div><div style="font-weight:600;font-size:0.9rem;">${L[league]}</div>
+                            <div style="font-size:0.72rem;color:var(--muted);">Awans: ${z.promo?.join(',')||'-'} | Baraże: ${z.barage?.join(',')||'-'} | Spadek: ${z.releg?.join(',')||'-'}</div></div>
+                            <button class="btn-sm" onclick="editZ('${league}', '${z.promo?.join(',')||''}', '${z.barage?.join(',')||''}', '${z.releg?.join(',')||''}')"><i class="fa-solid fa-pen"></i></button>
+                        </div>`;
+                    }
+                } catch(e) {}
+            }
+            document.getElementById('admin-zlist').innerHTML = html || '<p style="color:var(--muted);">Brak ustawień stref w bazie.</p>';
+        }
+
+        function editZ(league, promo, barage, releg){
+            document.getElementById('z-league').value = league;
+            document.getElementById('z-promo').value = promo;
+            document.getElementById('z-barage').value = barage;
+            document.getElementById('z-releg').value = releg;
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
+
+        async function saveTransfer(){
+            if(!user) return;
+            const id = document.getElementById('tr-id').value;
+            const newLeague = document.getElementById('tr-league').value;
+            const data = {
+                player: document.getElementById('tr-player').value,
+                league: newLeague,
+                from: document.getElementById('tr-from').value,
+                to: document.getElementById('tr-to').value,
+                fee: document.getElementById('tr-fee').value,
+                date: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            try {
+                const newDbase = getDB(newLeague);
+                const oldDbVal = document.getElementById('tr-db').value;
+                if(id){
+                    const oldDbase = oldDbVal === 'db2' ? window.db2 : window.db;
+                    if(oldDbase && oldDbase !== newDbase) {
+                        await oldDbase.collection('transfers').doc(id).delete();
+                        await newDbase.collection('transfers').doc(id).set(data);
+                    } else {
+                        await newDbase.collection('transfers').doc(id).update(data);
+                    }
+                } else {
+                    await newDbase.collection('transfers').add(data);
+                }
+                clearTrF(); loadAdminTr();
+            } catch(e) { alert('Błąd zapisu transferu.'); }
+        }
+
+        async function loadAdminTr(){
+            try {
+                const s1=await window.db.collection('transfers').orderBy('date','desc').limit(100).get();
+                let all=s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
+                if(window.db2){
+                    try {
+                        const s2=await window.db2.collection('transfers').orderBy('date','desc').limit(100).get();
+                        all=all.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
+                    } catch(e) {}
+                }
+                all.sort((a,b)=>(b.date?.seconds||0)-(a.date?.seconds||0));
+                
+                document.getElementById('admin-trlist').innerHTML=all.map(t=>`
+                    <div class="card" style="padding:0.9rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+                        <div><div style="font-weight:600;font-size:0.9rem;">${t.player}</div>
+                        <div style="font-size:0.72rem;color:var(--muted);">${L[t.league]} | ${t.from} <i class="fa-solid fa-arrow-right-long" style="color:var(--green);"></i> ${t.to}</div></div>
+                        <div style="display:flex;gap:4px;">
+                            <button class="btn-sm" onclick='editTr("${t.id}",${JSON.stringify(t).replace(/'/g,"&#39;")})'><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-sm btn-del" onclick="delTr('${t.id}', '${t._db}')"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`).join('')||'<p style="color:var(--muted);">Brak transferów.</p>';
+            } catch(e) { document.getElementById('admin-trlist').innerHTML = '<p style="color:#ff6b6b;">Błąd ładowania transferów.</p>'; }
+        }
+
+        function editTr(id, t){
+            document.getElementById('tr-id').value = id;
+            document.getElementById('tr-db').value = t._db || 'db1';
+            document.getElementById('tr-player').value = t.player || '';
+            document.getElementById('tr-league').value = t.league || 'iv_liga';
+            document.getElementById('tr-from').value = t.from || '';
+            document.getElementById('tr-to').value = t.to || '';
+            document.getElementById('tr-fee').value = t.fee || '';
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
+
+        async function delTr(id, dbVal){
+            if(confirm('Usunąć ten transfer?')){
+                const dbase = (dbVal==='db2' && window.db2) ? window.db2 : window.db;
+                await dbase.collection('transfers').doc(id).delete();
+                loadAdminTr();
+            }
+        }
+
+        function clearTrF(){
+            document.getElementById('tr-id').value=''; document.getElementById('tr-db').value='';
+            ['tr-player','tr-from','tr-to','tr-fee'].forEach(i=>document.getElementById(i).value='');
+        }
+
+        async function saveStat(){
+            if(!user) return;
+            const id = document.getElementById('s-id').value;
+            const newLeague = document.getElementById('s-league').value;
+            const data = {
+                player: document.getElementById('s-player').value,
+                team: document.getElementById('s-team').value,
+                league: newLeague,
+                goals: parseInt(document.getElementById('s-goals').value) || 0,
+                assists: parseInt(document.getElementById('s-assists').value) || 0
+            };
+            try {
+                const newDbase = getDB(newLeague);
+                const oldDbVal = document.getElementById('s-db').value;
+                if(id){
+                    const oldDbase = oldDbVal === 'db2' ? window.db2 : window.db;
+                    if(oldDbase && oldDbase !== newDbase) {
+                        await oldDbase.collection('stats').doc(id).delete();
+                        await newDbase.collection('stats').doc(id).set(data);
+                    } else {
+                        await newDbase.collection('stats').doc(id).update(data);
+                    }
+                } else {
+                    await newDbase.collection('stats').add(data);
+                }
+                clearSF(); loadAdminS();
+            } catch(e) { alert('Błąd zapisu statystyk.'); }
+        }
+
+        async function loadAdminS(){
+            try {
+                const s1=await window.db.collection('stats').get();
+                let all=s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
+                if(window.db2){
+                    try {
+                        const s2=await window.db2.collection('stats').get();
+                        all=all.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
+                    } catch(e) {}
+                }
+                document.getElementById('admin-slist').innerHTML=all.map(s=>`
+                    <div class="card" style="padding:0.9rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+                        <div><div style="font-weight:600;font-size:0.9rem;">${s.player}</div>
+                        <div style="font-size:0.72rem;color:var(--muted);">${L[s.league]} | ${s.team} | Gole: ${s.goals||0}, Asysty: ${s.assists||0}</div></div>
+                        <div style="display:flex;gap:4px;">
+                            <button class="btn-sm" onclick='editS("${s.id}",${JSON.stringify(s).replace(/'/g,"&#39;")})'><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-sm btn-del" onclick="delS('${s.id}', '${s._db}')"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`).join('')||'<p style="color:var(--muted);">Brak statystyk.</p>';
+            } catch(e) { document.getElementById('admin-slist').innerHTML = '<p style="color:#ff6b6b;">Błąd ładowania statystyk.</p>'; }
+        }
+
+        function editS(id, s){
+            document.getElementById('s-id').value = id;
+            document.getElementById('s-db').value = s._db || 'db1';
+            document.getElementById('s-player').value = s.player || '';
+            document.getElementById('s-team').value = s.team || '';
+            document.getElementById('s-league').value = s.league || 'iv_liga';
+            document.getElementById('s-goals').value = s.goals || 0;
+            document.getElementById('s-assists').value = s.assists || 0;
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
+
+        async function delS(id, dbVal){
+            if(confirm('Usunąć te statystyki?')){
+                const dbase = (dbVal==='db2' && window.db2) ? window.db2 : window.db;
+                await dbase.collection('stats').doc(id).delete();
+                loadAdminS();
+            }
+        }
+
+        function clearSF(){
+            document.getElementById('s-id').value=''; document.getElementById('s-db').value='';
+            ['s-player','s-team'].forEach(i=>document.getElementById(i).value='');
+            document.getElementById('s-goals').value='0'; document.getElementById('s-assists').value='0';
+        }
+
+        async function savePost(){
+            if(!user) return;
+            const id = document.getElementById('p-id').value;
+            const data = {
+                title: document.getElementById('p-title').value,
+                label: document.getElementById('p-label').value,
+                content: document.getElementById('p-content').value,
+                date: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            try {
+                if(id){
+                    await window.db.collection('posts').doc(id).update(data);
+                } else {
+                    await window.db.collection('posts').add(data);
+                }
+                clearPF(); loadAdminP();
+            } catch(e) { alert('Błąd zapisu wpisu.'); }
+        }
+
+        async function loadAdminP(){
+            try {
+                const s = await window.db.collection('posts').orderBy('date','desc').limit(50).get();
+                let all = s.docs.map(d=>({id:d.id, ...d.data()}));
+                
+                document.getElementById('admin-plist').innerHTML=all.map(p=>`
+                    <div class="card" style="padding:0.9rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+                        <div><div style="font-weight:600;font-size:0.9rem;">${p.title}</div>
+                        <div style="font-size:0.72rem;color:var(--muted);">${p.label} | ${fmtFinished(p.date)}</div></div>
+                        <div style="display:flex;gap:4px;">
+                            <button class="btn-sm" onclick='editP("${p.id}",${JSON.stringify(p).replace(/'/g,"&#39;")})'><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-sm btn-del" onclick="delP('${p.id}')"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`).join('')||'<p style="color:var(--muted);">Brak wpisów.</p>';
+            } catch(e) { document.getElementById('admin-plist').innerHTML = '<p style="color:#ff6b6b;">Błąd ładowania wpisów.</p>'; }
+        }
+
+        function editP(id, p){
+            document.getElementById('p-id').value = id;
+            document.getElementById('p-title').value = p.title || '';
+            document.getElementById('p-label').value = p.label || 'Komunikat';
+            document.getElementById('p-content').value = p.content || '';
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
+
+        async function delP(id){
+            if(confirm('Usunąć ten wpis?')){
+                await window.db.collection('posts').doc(id).delete();
+                loadAdminP();
+            }
+        }
+
+        function clearPF(){
+            document.getElementById('p-id').value='';
+            ['p-title','p-content'].forEach(i=>document.getElementById(i).value='');
+            document.getElementById('p-label').value='Komunikat';
+        }
+        
+    </script>
+</body>
+</html>
