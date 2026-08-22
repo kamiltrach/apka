@@ -490,6 +490,14 @@
 
 
         /* FINAL MOBILE OVERRIDE — only bottom navigation, dark app theme */
+        nav{display:none!important;}
+        main{margin-top:10px!important;}
+        .section{content-visibility:auto;contain-intrinsic-size:760px;}
+        .card,.table-wrap,.stats-row,.legend{contain:layout paint;}
+        .anim{animation-duration:.34s;will-change:auto;}
+        *{scroll-behavior:smooth;}
+        @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.anim{animation:none!important;opacity:1!important;transform:none!important}.wip-icon{animation:none!important}}
+
         html,body{background:#070b12!important;color:#f3f6fb!important;}
         body{background-image:radial-gradient(circle at 20% 0%,rgba(126,211,33,.06),transparent 32%),radial-gradient(circle at 100% 30%,rgba(36,99,235,.05),transparent 28%)!important;}
         nav{background:rgba(7,11,18,.96)!important;border-bottom:1px solid rgba(255,255,255,.06)!important;box-shadow:0 8px 24px rgba(0,0,0,.28)!important;}
@@ -533,13 +541,19 @@
         footer{background:#070b12!important;}
         .app-bottom-nav{background:rgba(6,10,16,.98)!important;border-top-color:rgba(255,255,255,.08)!important;box-shadow:0 -10px 30px rgba(0,0,0,.35)!important;}
         .bottom-tab{color:#6f7b8d!important;}
+        .bottom-tab{transition:color .16s ease,transform .16s ease;}
+        .bottom-tab:active{transform:scale(.94);}
         .bottom-tab.active{color:#8ad63d!important;}
         @media(min-width:0px){
-            nav{height:64px!important;min-height:64px!important;justify-content:flex-start!important;}
-            nav .logo-wrap{width:auto!important;}
-            main{margin-top:72px!important;}
+            nav{display:none!important;}
+            main{margin-top:10px!important;}
             footer{display:none!important;}
             .app-bottom-nav{display:flex!important;}
+        }
+
+
+        @media (hover:none){
+            .card:hover{transform:none!important;box-shadow:0 8px 26px rgba(0,0,0,.18)!important;}
         }
 
         @media(max-width:430px){
@@ -1180,26 +1194,41 @@
         }
 
         let crestsCache={};
-        async function loadCrests(){
-            crestsCache={};
-            for(const league of Object.keys(L)){
-                try{
-                    const dbase = getDB(league);
-                    const doc=await dbase.collection('standings').doc(league).get();
-                    if(doc.exists&&doc.data().teams) doc.data().teams.forEach(t=>{ if(t.name&&t.crest) crestsCache[t.name.trim()]=t.crest; });
-                }catch(e){}
-            }
+        let crestsLoaded=false;
+        let crestsPromise=null;
+        async function loadCrests(force=false){
+            if(crestsLoaded && !force) return crestsCache;
+            if(crestsPromise && !force) return crestsPromise;
+            crestsPromise=(async()=>{
+                const nextCache={};
+                await Promise.all(Object.keys(L).map(async league=>{
+                    try{
+                        const dbase=getDB(league);
+                        const doc=await dbase.collection('standings').doc(league).get();
+                        if(doc.exists&&doc.data().teams){
+                            doc.data().teams.forEach(t=>{
+                                if(t.name&&t.crest) nextCache[t.name.trim()]=t.crest;
+                            });
+                        }
+                    }catch(e){}
+                }));
+                crestsCache=nextCache;
+                crestsLoaded=true;
+                return crestsCache;
+            })();
+            try{return await crestsPromise;}finally{crestsPromise=null;}
         }
+        function invalidateCrests(){ crestsLoaded=false; crestsPromise=null; }
         function crestImg(name){
             const c=crestsCache[(name||'').trim()];
-            return c ? `<img src="${c}" class="team-crest" alt="">` : '<div class="team-crest" style="display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>';
+            return c ? `<img src="${c}" class="team-crest" alt="" loading="lazy" decoding="async">` : '<div class="team-crest" style="display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>';
         }
         function crestImgSmallFromStr(name){
             const c=crestsCache[(name||'').trim()];
-            return c ? `<img src="${c}" class="table-crest" alt="">` : '<div class="table-crest" style="display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>';
+            return c ? `<img src="${c}" class="table-crest" alt="" loading="lazy" decoding="async">` : '<div class="table-crest" style="display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>';
         }
         function crestImgSmall(t){
-            return t.crest ? `<img src="${t.crest}" class="table-crest" alt="">` : '<div class="table-crest" style="display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>';
+            return t.crest ? `<img src="${t.crest}" class="table-crest" alt="" loading="lazy" decoding="async">` : '<div class="table-crest" style="display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>';
         }
 
         function evalGoalDiff(d){
@@ -1217,16 +1246,27 @@
         }
 
         let zonesCache={};
-        async function loadZones(){
-            zonesCache={};
-            for(const league of Object.keys(L)){
-                try{
-                    const dbase = getDB(league);
-                    const doc=await dbase.collection('zones').doc(league).get();
-                    if(doc.exists) zonesCache[league]=doc.data();
-                }catch(e){}
-            }
+        let zonesLoaded=false;
+        let zonesPromise=null;
+        async function loadZones(force=false){
+            if(zonesLoaded && !force) return zonesCache;
+            if(zonesPromise && !force) return zonesPromise;
+            zonesPromise=(async()=>{
+                const nextCache={};
+                await Promise.all(Object.keys(L).map(async league=>{
+                    try{
+                        const dbase=getDB(league);
+                        const doc=await dbase.collection('zones').doc(league).get();
+                        if(doc.exists) nextCache[league]=doc.data();
+                    }catch(e){}
+                }));
+                zonesCache=nextCache;
+                zonesLoaded=true;
+                return zonesCache;
+            })();
+            try{return await zonesPromise;}finally{zonesPromise=null;}
         }
+        function invalidateZones(){ zonesLoaded=false; zonesPromise=null; }
         function getZones(league){ return zonesCache[league] || DEFAULT_ZONES; }
         function parsePositions(str){ return (str||'').split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)&&n>0); }
         function getRowClass(pos,league){
@@ -1272,14 +1312,11 @@
             if(!c1) return;
             try{
                 await loadCrests();
-                const s1 = await window.db.collection('matches').orderBy('date','asc').limit(500).get();
-                let allM = s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
-                if (window.db2) {
-                    try {
-                        const s2 = await window.db2.collection('matches').orderBy('date','asc').limit(500).get();
-                        allM = allM.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
-                    } catch(e) {}
-                }
+                const reads=[window.db.collection('matches').orderBy('date','asc').limit(500).get()];
+                if(window.db2) reads.push(window.db2.collection('matches').orderBy('date','asc').limit(500).get().catch(()=>null));
+                const [s1,s2]=await Promise.all(reads);
+                let allM=s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
+                if(s2) allM=allM.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
                 allM.sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0));
                 mc = allM;
                 renderGrid(upcomingList(mc).slice(0,6),'home-upcoming');
@@ -1484,14 +1521,11 @@
         async function loadTransfers(){
             const c=document.getElementById('transfers-grid');
             try{
-                const s1 = await window.db.collection('transfers').orderBy('date','desc').limit(150).get();
-                let allT = s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
-                if (window.db2) {
-                    try {
-                        const s2 = await window.db2.collection('transfers').orderBy('date','desc').limit(150).get();
-                        allT = allT.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
-                    } catch(e) {}
-                }
+                const reads=[window.db.collection('transfers').orderBy('date','desc').limit(150).get()];
+                if(window.db2) reads.push(window.db2.collection('transfers').orderBy('date','desc').limit(150).get().catch(()=>null));
+                const [s1,s2]=await Promise.all(reads);
+                let allT=s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
+                if(s2) allT=allT.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
                 allT.sort((a,b)=>(b.date?.seconds||0)-(a.date?.seconds||0));
                 allTransfers = allT;
                 if(allTransfers.length===0){c.innerHTML='<p style="color:var(--muted);padding:2rem;">Brak transferów.</p>';return;}
@@ -1581,7 +1615,7 @@
             const c = crestsCache[teamName.trim()];
             
             document.getElementById('modal-crest-container').innerHTML = c 
-                ? `<img src="${c}" class="modal-crest" alt="">` 
+                ? `<img src="${c}" class="modal-crest" alt="" loading="lazy" decoding="async">` 
                 : `<div class="modal-crest" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--muted);"><i class="fa-solid fa-shield"></i></div>`;
             
             document.getElementById('modal-team-name').innerText = teamName;
@@ -1701,7 +1735,7 @@
                 } else {
                     await newDbase.collection('matches').add(data);
                 }
-                clearMF();loadAdminM();
+                clearMF();invalidateCrests();loadAdminM();
             }catch(e){alert('Błąd zapisu spotkania');}
         }
         
@@ -1793,6 +1827,7 @@
                     await ref.set({teams, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}, {merge: true});
                 }
                 clearTF();
+                invalidateCrests();
                 loadAdminT();
             } catch(e) {
                 alert('Błąd podczas zapisywania drużyny');
@@ -1859,6 +1894,7 @@
             try {
                 const dbase = getDB(league);
                 await dbase.collection('zones').doc(league).set(data);
+                invalidateZones();
                 loadAdminZ();
                 alert('Strefy ligi zostały zapisane!');
             } catch(e) { alert('Błąd zapisu stref.'); }
