@@ -561,7 +561,9 @@
         }
 
         /* FINAL FIX: filter bars stay in document flow and never cover content */
-        .sub-nav-container{position:relative!important;top:0!important;z-index:40!important;backdrop-filter:none!important;padding-top:22px!important;margin-top:8px!important;scroll-margin-top:22px;pointer-events:auto!important;}
+        .sub-nav-container{position:relative!important;top:0!important;z-index:40!important;backdrop-filter:none!important;padding-top:34px!important;margin-top:16px!important;scroll-margin-top:34px;pointer-events:auto!important;}
+        .sub-nav-container .group-toggle,.sub-nav-container .sub-nav{position:relative!important;z-index:41!important;pointer-events:auto!important;}
+        .grp-tab,.sub-tab{pointer-events:auto!important;touch-action:manipulation!important;}
         .secret-trigger{display:none!important;pointer-events:none!important;}
 
         @media(max-width:430px){
@@ -1320,9 +1322,19 @@
         }
 
         let mc=[], curFilter='all', curMatchType='all';
-        function matchIsUpcoming(m){ return (m.status==='upcoming' || (m.scoreHome==null||m.scoreAway==null)) && m.status!=='finished'; }
+        function matchIsLive(m){
+            if(!m || m.status==='finished') return false;
+            if(m.status==='live' || m.live===true || m.isLive===true || m.status==='LIVE') return true;
+            if(!m.date || typeof m.date.seconds !== 'number') return false;
+            if(m.scoreHome!=null || m.scoreAway!=null) return false;
+            const start=m.date.seconds*1000;
+            const now=Date.now();
+            const durationMs=2*60*60*1000;
+            return now>=start && now<=start+durationMs;
+        }
+        function matchIsUpcoming(m){ return !matchIsLive(m) && (m.status==='upcoming' || (m.scoreHome==null||m.scoreAway==null)) && m.status!=='finished'; }
         function upcomingList(list){ return list.filter(matchIsUpcoming).sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0)); }
-        function finishedList(list){ return list.filter(m=>!matchIsUpcoming(m)).sort((a,b)=>(b.date?.seconds||0)-(a.date?.seconds||0)); }
+        function finishedList(list){ return list.filter(m=>!matchIsUpcoming(m) && !matchIsLive(m)).sort((a,b)=>(b.date?.seconds||0)-(a.date?.seconds||0)); }
 
         const DAYS=['niedziela','poniedziałek','wtorek','środa','czwartek','piątek','sobota'];
         function fmtUpcoming(ts){
@@ -1341,7 +1353,7 @@
         }
 
         function liveList(list){
-            return (list||[]).filter(m => m.status === 'live' || m.live === true || m.isLive === true || m.status === 'LIVE');
+            return (list||[]).filter(matchIsLive).sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0));
         }
 
         function renderLiveHome(){
@@ -1387,15 +1399,16 @@
         }
 
         function matchCard(m){
+            const live=matchIsLive(m);
             const up=matchIsUpcoming(m);
             return `<div class="card">
-                <div class="league-label"><i class="fa-solid fa-circle"></i>${L[m.league]||m.league}${up?'<span class="badge-up">Nadchodzący</span>':''}</div>
+                <div class="league-label"><i class="fa-solid fa-circle"></i>${L[m.league]||m.league}${live?'<span class="badge-up">NA ŻYWO</span>':(up?'<span class="badge-up">Nadchodzący</span>':'')}</div>
                 <div class="match-row">
                     <div class="team-wrap">${crestImg(m.homeTeam)}<span class="team-name" onclick="openClubProfile('${m.homeTeam}')">${m.homeTeam||'?'}</span></div>
-                    <div class="score-box ${up?'vs':''}">${up?'vs':`${m.scoreHome??'-'}:${m.scoreAway??'-'}`}</div>
+                    <div class="score-box ${up?'vs':''}">${live?`${m.scoreHome??0}:${m.scoreAway??0}`:(up?'vs':`${m.scoreHome??'-'}:${m.scoreAway??'-'}`)}</div>
                     <div class="team-wrap away"><span class="team-name" onclick="openClubProfile('${m.awayTeam}')">${m.awayTeam||'?'}</span>${crestImg(m.awayTeam)}</div>
                 </div>
-                <div class="match-date ${up?'up':''}">${up?fmtUpcoming(m.date):fmtFinished(m.date)}</div>
+                <div class="match-date ${up||live?'up':''}">${live?'<span style=\"color:#ff3d57;font-weight:700;\">● Mecz trwa</span>':(up?fmtUpcoming(m.date):fmtFinished(m.date))}</div>
             </div>`;
         }
 
