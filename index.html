@@ -661,15 +661,6 @@
                 <div class="stat-item"><span class="stat-num">Bieżąco</span><span class="stat-label">Aktualizacje</span></div>
                 <div class="stat-item"><span class="stat-num">Podkarpacie</span><span class="stat-label">Okręg</span></div>
             </div>
-
-            <div class="home-section anim d1" id="home-live-section">
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
-                    <h2 style="margin:0;display:flex;align-items:center;gap:7px;"><span style="color:#ff3d57;">●</span> Mecze <span>na żywo</span></h2>
-                    <span id="home-live-count" style="font-size:.62rem;color:#ff6b7d;text-transform:uppercase;letter-spacing:.7px;font-weight:700;"></span>
-                </div>
-                <div id="home-live-grid" class="grid"></div>
-            </div>
-
             <div class="home-section anim d4">
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
                     <h2 style="margin:0;">Aktualności <span>i posty</span></h2>
@@ -1333,7 +1324,7 @@
             return now>=start && now<=start+durationMs;
         }
         function matchIsUpcoming(m){ return !matchIsLive(m) && (m.status==='upcoming' || (m.scoreHome==null||m.scoreAway==null)) && m.status!=='finished'; }
-        function upcomingList(list){ return list.filter(matchIsUpcoming).sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0)); }
+        function upcomingList(list){ return list.filter(m=>matchIsUpcoming(m) || matchIsLive(m)).sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0)); }
         function finishedList(list){ return list.filter(m=>!matchIsUpcoming(m) && !matchIsLive(m)).sort((a,b)=>(b.date?.seconds||0)-(a.date?.seconds||0)); }
 
         const DAYS=['niedziela','poniedziałek','wtorek','środa','czwartek','piątek','sobota'];
@@ -1341,6 +1332,11 @@
             if(!ts) return 'Termin wkrótce';
             const d=new Date(ts.seconds*1000), pad=n=>String(n).padStart(2,'0');
             return `<i class="fa-regular fa-clock"></i> ${DAYS[d.getDay()]}, ${pad(d.getDate())}.${pad(d.getMonth()+1)} • ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        }
+        function fmtKickoff(ts){
+            if(!ts) return 'godzina nieustalona';
+            const d=new Date(ts.seconds*1000), pad=n=>String(n).padStart(2,'0');
+            return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
         }
         function fmtFinished(ts){
             if(!ts) return '';
@@ -1351,34 +1347,6 @@
             const d=new Date(ts.seconds*1000), pad=n=>String(n).padStart(2,'0');
             return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
         }
-
-        function liveList(list){
-            return (list||[]).filter(matchIsLive).sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0));
-        }
-
-        function renderLiveHome(){
-            const section=document.getElementById('home-live-section');
-            const grid=document.getElementById('home-live-grid');
-            const count=document.getElementById('home-live-count');
-            if(!section||!grid) return;
-            const live=liveList(mc);
-            if(count) count.textContent = live.length ? `${live.length} ${live.length===1?'mecz':'mecze'}` : '';
-            if(!live.length){
-                section.style.display='none';
-                return;
-            }
-            section.style.display='block';
-            grid.innerHTML=live.map(m=>`<div class="card">
-                <div class="league-label"><i class="live-dot"></i>${L[m.league]||m.league}<span class="badge-up">NA ŻYWO</span></div>
-                <div class="match-row">
-                    <div class="team-wrap">${crestImg(m.homeTeam)}<span class="team-name">${m.homeTeam||'?'}</span></div>
-                    <div class="score-box">${m.scoreHome??0}:${m.scoreAway??0}</div>
-                    <div class="team-wrap away"><span class="team-name">${m.awayTeam||'?'}</span>${crestImg(m.awayTeam)}</div>
-                </div>
-                <div class="match-date up"><span style="color:#ff3d57;font-weight:700;">●</span> Mecz trwa</div>
-            </div>`).join('');
-        }
-
         async function refreshMatches(){
             const c1=document.getElementById('home-upcoming');
             if(!c1) return;
@@ -1393,7 +1361,6 @@
                 mc = allM;
                 renderGrid(upcomingList(mc).slice(0,6),'home-upcoming');
                 renderGrid(finishedList(mc).slice(0,6),'home-grid');
-                renderLiveHome();
                 applyFilter();
             }catch(e){ c1.innerHTML='<p style="color:#ff6b6b;">Błąd bazy.</p>'; }
         }
@@ -1408,7 +1375,7 @@
                     <div class="score-box ${up?'vs':''}">${live?`${m.scoreHome??0}:${m.scoreAway??0}`:(up?'vs':`${m.scoreHome??'-'}:${m.scoreAway??'-'}`)}</div>
                     <div class="team-wrap away"><span class="team-name" onclick="openClubProfile('${m.awayTeam}')">${m.awayTeam||'?'}</span>${crestImg(m.awayTeam)}</div>
                 </div>
-                <div class="match-date ${up||live?'up':''}">${live?'<span style=\"color:#ff3d57;font-weight:700;\">● Mecz trwa</span>':(up?fmtUpcoming(m.date):fmtFinished(m.date))}</div>
+                <div class="match-date ${up||live?'up':''}">${live?'<span style="color:#ff3d57;font-weight:700;">● NA ŻYWO</span> · start ${fmtKickoff(m.date)}':(up?fmtUpcoming(m.date):fmtFinished(m.date))}</div>
             </div>`;
         }
 
