@@ -1627,9 +1627,9 @@
             return `<div class="card">
                 <div class="league-label"><i class="fa-solid fa-circle"></i>${L[m.league]||m.league}${live?'<span class="badge-up" style="color:#ff5f68;">NA ŻYWO</span>':up?'<span class="badge-up">Nadchodzący</span>':''}</div>
                 <div class="match-row">
-                    <div class="team-line">${crestImg(m.homeTeam)}<span class="team-name" onclick="event.stopPropagation();openClubProfile(${safeJsString(m.homeTeam||'')})">${m.homeTeam||'?'}</span><button class="favorite-star ${isFavoriteClub(m.homeTeam)?'is-favorite':''}" aria-label="${isFavoriteClub(m.homeTeam)?'Usuń z ulubionych':'Dodaj do ulubionych'}" data-favorite-team="${String(m.homeTeam||'').replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}"><i class="fa-${isFavoriteClub(m.homeTeam)?'solid':'regular'} fa-star"></i></button></div>
+                    <div class="team-line"><span onclick="event.stopPropagation();openClubProfile(${safeJsString(m.homeTeam||'')})" style="display:inline-flex;cursor:pointer;">${crestImg(m.homeTeam)}</span><span class="team-name" onclick="event.stopPropagation();openClubProfile(${safeJsString(m.homeTeam||'')})">${m.homeTeam||'?'}</span><button class="favorite-star ${isFavoriteClub(m.homeTeam)?'is-favorite':''}" aria-label="${isFavoriteClub(m.homeTeam)?'Usuń z ulubionych':'Dodaj do ulubionych'}" data-favorite-team="${String(m.homeTeam||'').replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}"><i class="fa-${isFavoriteClub(m.homeTeam)?'solid':'regular'} fa-star"></i></button></div>
                     <div class="score-box ${live?'vs':''}">${live?'<span class="live-badge">Na żywo</span>':(up?'vs':`${m.scoreHome??'-'}:${m.scoreAway??'-'}`)}</div>
-                    <div class="team-line away"><button class="favorite-star ${isFavoriteClub(m.awayTeam)?'is-favorite':''}" aria-label="${isFavoriteClub(m.awayTeam)?'Usuń z ulubionych':'Dodaj do ulubionych'}" data-favorite-team="${String(m.awayTeam||'').replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}"><i class="fa-${isFavoriteClub(m.awayTeam)?'solid':'regular'} fa-star"></i></button><span class="team-name" onclick="event.stopPropagation();openClubProfile(${safeJsString(m.awayTeam||'')})">${m.awayTeam||'?'}</span>${crestImg(m.awayTeam)}</div>
+                    <div class="team-line away"><button class="favorite-star ${isFavoriteClub(m.awayTeam)?'is-favorite':''}" aria-label="${isFavoriteClub(m.awayTeam)?'Usuń z ulubionych':'Dodaj do ulubionych'}" data-favorite-team="${String(m.awayTeam||'').replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}"><i class="fa-${isFavoriteClub(m.awayTeam)?'solid':'regular'} fa-star"></i></button><span class="team-name" onclick="event.stopPropagation();openClubProfile(${safeJsString(m.awayTeam||'')})">${m.awayTeam||'?'}</span><span onclick="event.stopPropagation();openClubProfile(${safeJsString(m.awayTeam||'')})" style="display:inline-flex;cursor:pointer;">${crestImg(m.awayTeam)}</span></div>
                 </div>
                 <div class="match-date ${up?'up':''}">${up?fmtUpcoming(m.date):fmtFinished(m.date)}</div>
             </div>`;
@@ -1709,7 +1709,7 @@
                 tb.innerHTML=teams.map((t,i)=>`
                     <tr class="${getRowClass(i+1,league)}">
                         <td class="${i<3?'top-pos':''}">${i+1}</td>
-                        <td><div class="team-cell">${crestImgSmall(t)}<span class="team-name" onclick="openClubProfile('${t.name}')" style="font-weight:600;">${t.name}</span></div></td>
+                        <td><div class="team-cell">${crestImgSmall(t)}<span class="team-name" onclick="event.stopPropagation();openClubProfile(${safeJsString(t.name||'')})" style="font-weight:600;">${t.name}</span></div></td>
                         <td style="color:var(--muted)">${t.m}</td>
                         <td style="font-weight:800;color:var(--green);">${t.pts}</td>
                         <td style="color:var(--muted);font-size:0.8rem;">${t.diff}</td>
@@ -1728,7 +1728,7 @@
                 tb.innerHTML=all.slice(0,5).map((t,i)=>`
                     <tr class="${getRowClass(i+1,'iv_liga')}">
                         <td class="${i<3?'top-pos':''}">${i+1}</td>
-                        <td><div class="team-cell">${crestImgSmall(t)}<span class="team-name" onclick="openClubProfile('${t.name}')" style="font-weight:600;">${t.name}</span></div></td>
+                        <td><div class="team-cell">${crestImgSmall(t)}<span class="team-name" onclick="event.stopPropagation();openClubProfile(${safeJsString(t.name||'')})" style="font-weight:600;">${t.name}</span></div></td>
                         <td style="color:var(--muted)">${t.m}</td>
                         <td style="font-weight:800;color:var(--green);">${t.pts}</td>
                         <td style="color:var(--muted);font-size:0.8rem;">${t.diff}</td>
@@ -1792,7 +1792,7 @@
                     <tr>
                         <td style="color:var(--muted); font-weight:800;">${i+1}</td>
                         <td style="font-weight:600;">${st.player}</td>
-                        <td style="color:var(--muted); font-size:0.8rem;"><div class="team-cell">${crestImgSmallFromStr(st.team)} <span class="team-name" onclick="openClubProfile('${st.team}')">${st.team}</span></div></td>
+                        <td style="color:var(--muted); font-size:0.8rem;"><div class="team-cell">${crestImgSmallFromStr(st.team)} <span class="team-name" onclick="event.stopPropagation();openClubProfile(${safeJsString(st.team||'')})">${st.team}</span></div></td>
                         <td style="font-weight:800; color:var(--green); font-size:1.15rem; text-align:center;">${st.goals||0}</td>
                     </tr>
                 `).join('');
@@ -1807,7 +1807,7 @@
                     <tr>
                         <td style="color:var(--muted); font-weight:800;">${i+1}</td>
                         <td style="font-weight:600;">${st.player}</td>
-                        <td style="color:var(--muted); font-size:0.8rem;"><div class="team-cell">${crestImgSmallFromStr(st.team)} <span class="team-name" onclick="openClubProfile('${st.team}')">${st.team}</span></div></td>
+                        <td style="color:var(--muted); font-size:0.8rem;"><div class="team-cell">${crestImgSmallFromStr(st.team)} <span class="team-name" onclick="event.stopPropagation();openClubProfile(${safeJsString(st.team||'')})">${st.team}</span></div></td>
                         <td style="font-weight:800; color:var(--gold); font-size:1.15rem; text-align:center;">${st.assists||0}</td>
                     </tr>
                 `).join('');
