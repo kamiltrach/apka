@@ -546,7 +546,7 @@
         .bottom-tab.active{color:#8ad63d!important;}
         @media(min-width:0px){
             nav{display:none!important;}
-            main{margin-top:10px!important;}
+            main{margin-top:max(44px, env(safe-area-inset-top))!important;padding-top:6px;}
             footer{display:none!important;}
             .app-bottom-nav{display:flex!important;}
         }
@@ -1401,6 +1401,12 @@
         function matchTimestamp(m){return m?.date?.seconds ? m.date.seconds*1000 : (m?.date?.toMillis ? m.date.toMillis() : null);}
         function safeJsString(value){ return JSON.stringify(String(value ?? '')); }
         function matchIsFinished(m){return m?.status==='finished' || (m?.scoreHome!=null && m?.scoreAway!=null);}
+        function getMatchPhase(m){
+            if(matchIsFinished(m)) return 'finished';
+            const ts=matchTimestamp(m);
+            if(ts!=null && Date.now()>=ts) return 'live';
+            return 'upcoming';
+        }
         function isLiveMatch(m){const ts=matchTimestamp(m); return !matchIsFinished(m) && ts!=null && Date.now()>=ts;}
         function isMatchLive(m){ return isLiveMatch(m); }
         async function showAppNotification(title,body,data={}){
@@ -1557,17 +1563,38 @@
             return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
         }
 
+        async function readMatchesFromDB(dbase, dbLabel){
+            if(!dbase) return [];
+            try{
+                // Najpierw szybki odczyt bez orderBy — działa także wtedy, gdy część dokumentów nie ma pola date.
+                const snap=await dbase.collection('matches').limit(500).get();
+                return snap.docs.map(d=>({id:d.id,_db:dbLabel,...d.data()}));
+            }catch(primaryError){
+                // Awaryjnie próbujemy starszego sposobu sortowania po stronie Firestore.
+                try{
+                    const snap=await dbase.collection('matches').orderBy('date','asc').limit(500).get();
+                    return snap.docs.map(d=>({id:d.id,_db:dbLabel,...d.data()}));
+                }catch(fallbackError){
+                    console.warn('Nie udało się pobrać meczów:', primaryError, fallbackError);
+                    return [];
+                }
+            }
+        }
+
         async function refreshMatches(){
             const c1=document.getElementById('home-upcoming');
             if(!c1) return;
             try{
                 await loadCrests();
-                const reads=[window.db.collection('matches').orderBy('date','asc').limit(500).get()];
-                if(window.db2) reads.push(window.db2.collection('matches').orderBy('date','asc').limit(500).get().catch(()=>null));
-                const [s1,s2]=await Promise.all(reads);
-                let allM=s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
-                if(s2) allM=allM.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
-                allM.sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0));
+                const [db1Matches,db2Matches]=await Promise.all([
+                    readMatchesFromDB(window.db,'db1'),
+                    window.db2 ? readMatchesFromDB(window.db2,'db2') : Promise.resolve([])
+                ]);
+                let allM=db1Matches.concat(db2Matches);
+                allM.sort((a,b)=>matchTimestamp(a)-matchTimestamp(b));
+                if(!allM.length){
+                    throw new Error('Brak odczytanych meczów z Firebase.');
+                }
                 const previous={...notificationSnapshot};
                 allM.forEach(m=>{notificationSnapshot[m.id]={home:m.scoreHome,away:m.scoreAway,phase:getMatchPhase(m),ts:matchTimestamp(m)};});
                 if(notificationSettings.enabled && notificationSettings.result){
@@ -1583,7 +1610,14 @@
                 renderGrid(upcomingList(mc).slice(0,6),'home-upcoming');
                 renderGrid(finishedList(mc).slice(0,6),'home-grid');
                 applyFilter();
-            }catch(e){ c1.innerHTML='<p style="color:#ff6b6b;">Błąd bazy.</p>'; }
+            }catch(e){
+                console.error('Błąd ładowania meczów:',e);
+                c1.innerHTML='<p style="color:#ff6b6b;">Błąd bazy danych. Spróbuj ponownie.</p>';
+                const up=document.getElementById('upcoming-grid');
+                const res=document.getElementById('results-grid');
+                if(up) up.innerHTML='<p style="color:#ff6b6b;text-align:center;padding:1.5rem;">Nie udało się pobrać meczów.</p>';
+                if(res) res.innerHTML='';
+            }
         }
 
         function matchCard(m){
