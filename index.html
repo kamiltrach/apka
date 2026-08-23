@@ -557,7 +557,7 @@
         }
 
         /* FINAL FIX: filter bars stay in document flow and never cover content */
-        .sub-nav-container{position:relative!important;top:auto!important;z-index:2!important;backdrop-filter:none!important;}
+        .sub-nav-container{position:relative!important;top:auto!important;z-index:2!important;backdrop-filter:none!important;padding-top:10px!important;margin-top:8px!important;scroll-margin-top:12px;}
         .secret-trigger{display:none!important;pointer-events:none!important;}
 
         @media(max-width:430px){
@@ -676,6 +676,26 @@
                 <div class="legend" id="home-legend"></div>
                 <div style="text-align:center;margin-top:1.4rem;">
                     <button class="btn-sm" onclick="go('table')" style="border:1px solid var(--border);padding:11px 22px;">Zobacz pełną tabelę →</button>
+                </div>
+            </div>
+
+            <div class="home-section anim d4">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
+                    <h2 style="margin:0;">Aktualności <span>i posty</span></h2>
+                    <button class="btn-sm" onclick="go('posts')" style="border:1px solid var(--border);padding:7px 10px;">Wszystkie →</button>
+                </div>
+                <div id="home-posts-grid" class="grid"></div>
+            </div>
+
+            <div class="home-section anim d4">
+                <h2>Transmisje <span>na żywo</span></h2>
+                <div class="card" onclick="go('streams')" style="cursor:pointer;display:flex;align-items:center;gap:12px;">
+                    <div style="width:42px;height:42px;border-radius:12px;background:rgba(126,211,33,.12);display:flex;align-items:center;justify-content:center;color:#91dc45;flex-shrink:0;"><i class="fa-solid fa-tower-broadcast"></i></div>
+                    <div style="min-width:0;flex:1;">
+                        <div style="font-weight:700;font-size:.88rem;">Transmisje meczów</div>
+                        <div style="font-size:.7rem;color:#8995a7;margin-top:2px;">Sprawdź dostępne transmisje z Podkarpacia.</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="color:#6f7b8d;font-size:.75rem;"></i>
                 </div>
             </div>
         </section>
@@ -1185,7 +1205,7 @@
             sec.querySelectorAll('.anim').forEach(el=>{el.style.animation='none';el.offsetHeight;el.style.animation=null;});
             window.scrollTo({top:0,behavior:'smooth'});
             
-            if(id==='home'){ refreshMatches(); loadHomeTable(); }
+            if(id==='home'){ refreshMatches(); loadHomeTable(); loadPosts(); }
             if(id==='matches') refreshMatches();
             if(id==='table') loadTable('iv_liga');
             if(id==='stats') loadStats('iv_liga');
@@ -1569,12 +1589,25 @@
             });
         }
 
+        function renderHomePosts(){
+            const c=document.getElementById('home-posts-grid');
+            if(!c) return;
+            const list=postsCache.slice(0,3);
+            c.innerHTML=list.length ? list.map((p,idx)=>`<div class="card" onclick="go('posts');setTimeout(()=>openPostModal(${idx}),60)" style="cursor:pointer;">
+                <div class="league-label"><i class="fa-solid fa-bullhorn"></i> ${p.label||'Informacja'}</div>
+                <h3 style="font-size:.88rem;margin-bottom:.45rem;color:#f3f6fb;">${p.title}</h3>
+                <p style="color:#8995a7;font-size:.69rem;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${parseLinks(p.content)}</p>
+                <div style="margin-top:8px;font-size:.61rem;color:#91dc45;">Czytaj więcej →</div>
+            </div>`).join('') : '<p style="color:#7f8b9d;padding:8px 0;">Brak aktualności.</p>';
+        }
+
         async function loadPosts(){
             const c=document.getElementById('posts-grid');
             try{
                 const s=await window.db.collection('posts').orderBy('date','desc').limit(20).get();
-                if(s.empty){c.innerHTML='<p style="color:var(--muted);padding:2rem;">Brak postów.</p>';return;}
+                if(s.empty){c.innerHTML='<p style="color:var(--muted);padding:2rem;">Brak postów.</p>';postsCache=[];renderHomePosts();return;}
                 postsCache = s.docs.map(d=>({id:d.id, ...d.data()}));
+                renderHomePosts();
                 
                 c.innerHTML=postsCache.map((p, idx)=>{
                     return `<div class="card" onclick="openPostModal(${idx})" style="cursor:pointer;">
@@ -2179,6 +2212,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             refreshMatches();
             loadHomeTable();
+            loadPosts();
         });
         
     </script>
