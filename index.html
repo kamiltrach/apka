@@ -318,10 +318,6 @@
         }
         .home-section h2 span{color:var(--app-green-dark);}
         .group-title i{color:var(--app-green-dark);}
-        #home-live-section .league-label i{color:#ff3d57;}
-        #home-live-grid .card{border-color:rgba(255,61,87,.24);}
-        .live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#ff3d57;box-shadow:0 0 0 0 rgba(255,61,87,.55);animation:livePulse 1.6s infinite;}
-        @keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(255,61,87,.55)}70%{box-shadow:0 0 0 7px rgba(255,61,87,0)}100%{box-shadow:0 0 0 0 rgba(255,61,87,0)}}
 
         .grid{grid-template-columns:1fr;gap:8px;}
         .card{
@@ -368,7 +364,7 @@
         .match-date{font-size:.59rem;color:#98a2b2;margin-top:7px;}
         .match-date.up{color:var(--app-green-dark);}
 
-        .sub-nav-container{margin-bottom:14px;position:relative;top:0;z-index:20;padding-top:14px;background:transparent;backdrop-filter:none;pointer-events:auto;scroll-margin-top:18px;}
+        .sub-nav-container{margin-bottom:14px;position:relative;top:auto;z-index:2;padding-top:5px;background:rgba(238,241,245,.96);backdrop-filter:none;}
         .group-toggle{gap:6px;margin-bottom:7px;padding-bottom:0;}
         .grp-tab{
             padding:7px 10px;
@@ -484,7 +480,7 @@
             .stats-row{border-radius:12px;}
             .stat-num{font-size:.95rem;}
             .app-bottom-nav{display:flex;}
-            .sub-nav-container{top:0;padding-top:14px;z-index:20;}
+            .sub-nav-container{top:auto;}
             .grid{gap:7px;}
             .card{padding:11px;border-radius:11px;}
             .table-container{margin:0;border-radius:12px;}
@@ -550,7 +546,7 @@
         .bottom-tab.active{color:#8ad63d!important;}
         @media(min-width:0px){
             nav{display:none!important;}
-            main{margin-top:10px!important;}
+            main{margin-top:max(44px, env(safe-area-inset-top))!important;padding-top:6px;}
             footer{display:none!important;}
             .app-bottom-nav{display:flex!important;}
         }
@@ -560,10 +556,33 @@
             .card:hover{transform:none!important;box-shadow:0 8px 26px rgba(0,0,0,.18)!important;}
         }
 
-        /* FINAL FIX: filter bars stay in document flow and never cover content */
-        .sub-nav-container{position:relative!important;top:0!important;z-index:40!important;backdrop-filter:none!important;padding-top:34px!important;margin-top:16px!important;scroll-margin-top:34px;pointer-events:auto!important;}
-        .sub-nav-container .group-toggle,.sub-nav-container .sub-nav{position:relative!important;z-index:41!important;pointer-events:auto!important;}
-        .grp-tab,.sub-tab{pointer-events:auto!important;touch-action:manipulation!important;}
+        /* FINAL FIX: mobile league/filter tabs optimized for iPhone touch */
+        .sub-nav-container{
+            position:relative!important;
+            top:auto!important;
+            z-index:20!important;
+            backdrop-filter:none!important;
+            isolation:isolate;
+            touch-action:pan-y;
+            overflow:visible!important;
+        }
+        .group-toggle,.sub-nav{
+            position:relative!important;
+            z-index:21!important;
+            -webkit-overflow-scrolling:touch!important;
+            overscroll-behavior-x:contain;
+            touch-action:pan-x!important;
+            -webkit-user-select:none;
+            user-select:none;
+        }
+        .grp-tab,.sub-tab{
+            position:relative!important;
+            z-index:22!important;
+            pointer-events:auto!important;
+            -webkit-tap-highlight-color:rgba(138,214,61,.14);
+            touch-action:manipulation!important;
+            cursor:pointer;
+        }
         .secret-trigger{display:none!important;pointer-events:none!important;}
 
         @media(max-width:430px){
@@ -581,7 +600,53 @@
             .sub-nav-container{margin-left:-2px;margin-right:-2px;}
         }
 
-    </style>
+    
+        /* DODATKI APLIKACYJNE: ulubione, aktualnosci, ustawienia i powiadomienia */
+        .favorite-star{
+            width:30px;height:30px;flex:0 0 30px;border-radius:50%;
+            display:inline-flex;align-items:center;justify-content:center;
+            color:#687487;background:#111a27;border:1px solid rgba(255,255,255,.08);
+            transition:transform .16s ease,color .16s ease,background .16s ease;
+            touch-action:manipulation;
+        }
+        .favorite-star.is-favorite{color:#f5c451;background:rgba(245,196,81,.12);border-color:rgba(245,196,81,.25);}
+        .favorite-star:active{transform:scale(.9)}
+        .team-line{display:flex;align-items:center;gap:7px;min-width:0;width:40%;}
+        .team-line.away{justify-content:flex-end;}
+        .team-line.away .team-name{text-align:right;}
+        .team-line .team-name{min-width:0;}
+        .quick-actions{display:flex;gap:7px;margin:0 0 18px;overflow-x:auto;scrollbar-width:none;}
+        .quick-actions::-webkit-scrollbar{display:none}
+        .quick-action{flex:0 0 auto;padding:8px 11px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:#0d141f;color:#aab5c5;font-size:.68rem;font-weight:700;}
+        .quick-action i{margin-right:5px;color:#8ad63d;}
+        .settings-list{display:grid;gap:8px;}
+        .setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;background:#0d141f;border:1px solid rgba(255,255,255,.075);border-radius:12px;}
+        .setting-row h3{font-size:.8rem;color:#edf2f8;margin-bottom:2px;}
+        .setting-row p{font-size:.66rem;color:#778398;line-height:1.35;}
+        .switch{position:relative;width:48px;height:28px;flex:0 0 48px;}
+        .switch input{opacity:0;width:0;height:0;position:absolute;}
+        .slider{position:absolute;inset:0;border-radius:28px;background:#202b3a;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:.18s;}
+        .slider:before{content:'';position:absolute;width:22px;height:22px;left:2px;top:2px;border-radius:50%;background:#9aa5b5;transition:.18s;}
+        .switch input:checked + .slider{background:#79c433;border-color:#79c433;}
+        .switch input:checked + .slider:before{transform:translateX(20px);background:#07100a;}
+        .notify-status{padding:10px 12px;border-radius:10px;background:rgba(126,211,33,.08);border:1px solid rgba(126,211,33,.16);color:#8bd543;font-size:.68rem;margin-bottom:10px;}
+        .notify-status.warn{background:rgba(245,166,35,.08);border-color:rgba(245,166,35,.16);color:#f5b64b;}
+        .favorite-empty{padding:24px 12px;text-align:center;color:#7f8b9d;font-size:.78rem;background:#0d141f;border:1px dashed rgba(255,255,255,.08);border-radius:12px;}
+        .favorite-clubs{display:grid;gap:8px;margin-bottom:18px;}
+        .favorite-club{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;background:#0d141f;border:1px solid rgba(255,255,255,.075);border-radius:12px;}
+        .favorite-club-main{display:flex;align-items:center;gap:8px;min-width:0;}
+        .favorite-club-main .team-name{font-size:.8rem;}
+        .live-badge{margin-left:auto;color:#ff5f68;font-size:.56rem;letter-spacing:.8px;font-weight:800;text-transform:uppercase;}
+        @media(max-width:430px){
+            .favorite-star{width:28px;height:28px;flex-basis:28px;font-size:.75rem;}
+            .team-line{width:41%;}
+            .quick-action{font-size:.64rem;padding:8px 10px;}
+            .setting-row{padding:12px;}
+        }
+        .app-bottom-nav{overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+        .app-bottom-nav::-webkit-scrollbar{display:none;}
+        .bottom-tab{flex:0 0 72px;}
+</style>
 </head>
 <body>
 
@@ -613,12 +678,7 @@
             <button class="modal-close" onclick="closeClubProfile()"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-header">
                 <div id="modal-crest-container"></div>
-                <div style="min-width:0;flex:1;">
-                    <h2 class="modal-title" id="modal-team-name">Nazwa Klubu</h2>
-                    <button id="favorite-team-btn" class="btn-sm" type="button" onclick="toggleFavoriteTeam()" style="margin-top:8px;border:1px solid var(--border);display:inline-flex;align-items:center;gap:7px;">
-                        <i class="fa-regular fa-star"></i><span>Dodaj do ulubionych</span>
-                    </button>
-                </div>
+                <h2 class="modal-title" id="modal-team-name">Nazwa Klubu</h2>
             </div>
 
             <div style="display:flex; gap:8px; margin-bottom:1.2rem; border-bottom:1px solid var(--border); padding-bottom:10px;">
@@ -642,9 +702,11 @@
     <div class="app-bottom-nav" aria-label="Nawigacja aplikacji">
         <button class="bottom-tab active" data-section="home" onclick="go('home')"><i class="fa-solid fa-house"></i><span>Start</span></button>
         <button class="bottom-tab" data-section="matches" onclick="go('matches')"><i class="fa-solid fa-futbol"></i><span>Mecze</span></button>
+        <button class="bottom-tab" data-section="favorites" onclick="go('favorites')"><i class="fa-solid fa-star"></i><span>Ulubione</span></button>
         <button class="bottom-tab" data-section="table" onclick="go('table')"><i class="fa-solid fa-ranking-star"></i><span>Tabela</span></button>
         <button class="bottom-tab" data-section="stats" onclick="go('stats')"><i class="fa-solid fa-chart-simple"></i><span>Statystyki</span></button>
         <button class="bottom-tab" data-section="transfers" onclick="go('transfers')"><i class="fa-solid fa-right-left"></i><span>Transfery</span></button>
+        <button class="bottom-tab" data-section="posts" onclick="go('posts')"><i class="fa-solid fa-newspaper"></i><span>Aktualności</span></button>
     </div>
 
     <main>
@@ -654,31 +716,16 @@
                 <h1>Strefa<span>Gola</span></h1>
                 <p>IV Liga, Klasa Okręgowa oraz A i B Klasy Jarosław, Przeworsk, Rzeszów, Dębica, Stalowa Wola, Krosno.<br>Dane. Statystyki. Profesjonalizm.</p>
             </div>
+            <div class="quick-actions">
+                <button class="quick-action" onclick="go('favorites')"><i class="fa-solid fa-star"></i>Ulubione kluby</button>
+                <button class="quick-action" onclick="go('posts')"><i class="fa-solid fa-newspaper"></i>Aktualności</button>
+            </div>
 
             <div class="stats-row anim d1">
                 <div class="stat-item"><span class="stat-num">12</span><span class="stat-label">Lig</span></div>
                 <div class="stat-item"><span class="stat-num">150+</span><span class="stat-label">Drużyn</span></div>
                 <div class="stat-item"><span class="stat-num">Bieżąco</span><span class="stat-label">Aktualizacje</span></div>
                 <div class="stat-item"><span class="stat-num">Podkarpacie</span><span class="stat-label">Okręg</span></div>
-            </div>
-            <div class="home-section anim d4">
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
-                    <h2 style="margin:0;">Aktualności <span>i posty</span></h2>
-                    <button class="btn-sm" onclick="go('posts')" style="border:1px solid var(--border);padding:7px 10px;">Wszystkie →</button>
-                </div>
-                <div id="home-posts-grid" class="grid"></div>
-            </div>
-
-            <div class="home-section anim d4">
-                <h2>Transmisje <span>na żywo</span></h2>
-                <div class="card" onclick="go('streams')" style="cursor:pointer;display:flex;align-items:center;gap:12px;">
-                    <div style="width:42px;height:42px;border-radius:12px;background:rgba(126,211,33,.12);display:flex;align-items:center;justify-content:center;color:#91dc45;flex-shrink:0;"><i class="fa-solid fa-tower-broadcast"></i></div>
-                    <div style="min-width:0;flex:1;">
-                        <div style="font-weight:700;font-size:.88rem;">Transmisje meczów</div>
-                        <div style="font-size:.7rem;color:#8995a7;margin-top:2px;">Sprawdź dostępne transmisje z Podkarpacia.</div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right" style="color:#6f7b8d;font-size:.75rem;"></i>
-                </div>
             </div>
 
             <div class="home-section anim d2">
@@ -689,6 +736,25 @@
             <div class="home-section anim d3">
                 <h2>Ostatnie <span>spotkania</span></h2>
                 <div id="home-grid" class="grid"></div>
+            </div>
+
+            <div class="home-section anim">
+                <h2>Aktualności <span>najnowsze</span></h2>
+                <div id="home-posts" class="grid"></div>
+                <div style="text-align:center;margin-top:1rem;">
+                    <button class="btn-sm" onclick="go('posts')" style="border:1px solid var(--border);padding:10px 20px;">Wszystkie aktualności →</button>
+                </div>
+            </div>
+
+            <div class="home-section anim">
+                <h2><span>Transmisje</span></h2>
+                <div id="home-streams">
+                    <div class="wip-container" style="padding:28px 16px;">
+                        <div class="wip-icon" style="font-size:2rem;"><i class="fa-solid fa-tower-broadcast"></i></div>
+                        <p class="wip-text">Transmisje z meczów Podkarpacia pojawią się tutaj.</p>
+                        <button class="btn-sm" onclick="go('streams')" style="margin-top:12px;border:1px solid var(--border);padding:10px 20px;">Otwórz Transmisje →</button>
+                    </div>
+                </div>
             </div>
 
             <div class="home-section anim d4">
@@ -703,8 +769,7 @@
                     <button class="btn-sm" onclick="go('table')" style="border:1px solid var(--border);padding:11px 22px;">Zobacz pełną tabelę →</button>
                 </div>
             </div>
-
-       </section>
+        </section>
 
         <section id="matches" class="section">
             <div class="sub-nav-container anim" id="matches-sub">
@@ -871,7 +936,21 @@
             <div id="posts-grid" class="grid anim d1"></div>
         </section>
 
-        <section id="contact" class="section">
+        <section id="favorites" class="section">
+            <div class="hero anim" style="padding:16px 4px 14px;">
+                <h1 style="font-size:1.7rem;">Moje <span>ulubione</span></h1>
+                <p>Twoje kluby i mecze obserwowane przez gwiazdkę.</p>
+            </div>
+            <div class="home-section anim d1">
+                <h2>Ulubione <span>kluby</span></h2>
+                <div id="favorite-clubs" class="favorite-clubs"></div>
+            </div>
+            <div class="home-section anim d2">
+                <h2>Ulubione <span>mecze</span></h2>
+                <div id="favorite-matches" class="grid"></div>
+            </div>
+        </section>
+<section id="contact" class="section">
             <div class="hero anim" style="padding:2.5rem 0 1.8rem;">
                 <h1 style="font-size:2.2rem;">Kontakt</h1>
                 <p>Masz pytania, propozycje lub chcesz zgłosić błąd? Napisz do nas.</p>
@@ -1202,21 +1281,23 @@
         function go(id){
             document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
             document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            const map=['home','matches','table','stats','transfers','streams','posts','contact','admin'];
+            const target=document.getElementById(id);
+            if(!target) return;
+            target.classList.add('active');
+            const map=['home','matches','table','stats','transfers','streams','posts','contact','admin','favorites'];
             const idx=map.indexOf(id);
-            if(idx>=0&&idx<8) document.querySelectorAll('.tab')[idx].classList.add('active');
+            if(idx>=0&&idx<8){ const tabs=document.querySelectorAll('.tab'); if(tabs[idx]) tabs[idx].classList.add('active'); }
             document.querySelectorAll('.bottom-tab').forEach(b=>b.classList.toggle('active', b.dataset.section===id));
-            const sec=document.getElementById(id);
-            sec.querySelectorAll('.anim').forEach(el=>{el.style.animation='none';el.offsetHeight;el.style.animation=null;});
+            target.querySelectorAll('.anim').forEach(el=>{el.style.animation='none';el.offsetHeight;el.style.animation=null;});
             window.scrollTo({top:0,behavior:'smooth'});
-            
-            if(id==='home'){ refreshMatches(); loadHomeTable(); loadPosts(); }
+            if(id==='home'){ refreshMatches(); loadHomeTable(); loadHomePosts(); }
             if(id==='matches') refreshMatches();
             if(id==='table') loadTable('iv_liga');
             if(id==='stats') loadStats('iv_liga');
             if(id==='transfers') loadTransfers();
             if(id==='posts') loadPosts();
+            if(id==='favorites'){ refreshMatches().then(()=>renderFavorites()); }
+            if(id==='settings') renderNotificationSettings();
         }
 
         let crestsCache={};
@@ -1271,6 +1352,148 @@
             return parseInt(str) || 0;
         }
 
+        /* ULUBIONE KLUBY + POWIADOMIENIA */
+        const FAVORITES_KEY='strefagola_favorite_clubs_v1';
+        const NOTIFY_KEY='strefagola_notification_settings_v1';
+        const NOTIFY_SEEN_KEY='strefagola_notification_seen_v1';
+        const defaultNotificationSettings={enabled:false,before60:true,before15:true,start:true,result:true,news:true};
+        let favoriteClubs=[];
+        let notificationSettings={...defaultNotificationSettings};
+        let notificationTimer=null;
+        let notificationSnapshot={};
+        let latestPostsSnapshot=[];
+        function loadLocalPreferences(){
+            try{favoriteClubs=JSON.parse(localStorage.getItem(FAVORITES_KEY)||'[]');}catch(e){favoriteClubs=[];}
+            try{notificationSettings={...defaultNotificationSettings,...JSON.parse(localStorage.getItem(NOTIFY_KEY)||'{}')};}catch(e){notificationSettings={...defaultNotificationSettings};}
+        }
+        function persistFavorites(){localStorage.setItem(FAVORITES_KEY,JSON.stringify(favoriteClubs));}
+        function isFavoriteClub(name){return !!name && favoriteClubs.some(x=>String(x).toLowerCase()===String(name).toLowerCase());}
+        function toggleFavoriteClub(name){
+            if(!name) return;
+            const idx=favoriteClubs.findIndex(x=>String(x).toLowerCase()===String(name).toLowerCase());
+            if(idx>=0) favoriteClubs.splice(idx,1); else favoriteClubs.push(name.trim());
+            persistFavorites();
+            refreshRenderedFavoriteStars();
+            renderFavorites();
+        }
+        function refreshRenderedFavoriteStars(){
+            document.querySelectorAll('.favorite-star').forEach(btn=>{
+                const card=btn.closest('.team-line'); if(!card) return;
+                const nameEl=card.querySelector('.team-name'); const name=nameEl?.textContent?.trim()||'';
+                const fav=isFavoriteClub(name); btn.classList.toggle('is-favorite',fav); btn.innerHTML=`<i class="fa-${fav?'solid':'regular'} fa-star"></i>`;
+            });
+        }
+        function renderFavorites(){
+            const clubs=document.getElementById('favorite-clubs'); const matches=document.getElementById('favorite-matches');
+            if(!clubs||!matches) return;
+            clubs.innerHTML=favoriteClubs.length?favoriteClubs.map(name=>`<div class="favorite-club"><div class="favorite-club-main">${crestImg(name)}<span class="team-name">${name}</span></div><button class="favorite-star is-favorite" onclick="toggleFavoriteClub(${safeJsString(name)})"><i class="fa-solid fa-star"></i></button></div>`).join(''):'<div class="favorite-empty">Kliknij gwiazdkę przy nazwie klubu, aby dodać go do ulubionych.</div>';
+            const list=mc.filter(m=>isFavoriteClub(m.homeTeam)||isFavoriteClub(m.awayTeam));
+            renderGrid(list.slice(0,20),'favorite-matches');
+            if(!list.length) matches.innerHTML='<div class="favorite-empty">Brak meczów Twoich ulubionych klubów.</div>';
+        }
+        function matchTimestamp(m){return m?.date?.seconds ? m.date.seconds*1000 : (m?.date?.toMillis ? m.date.toMillis() : null);}
+        function safeJsString(value){ return JSON.stringify(String(value ?? '')); }
+        function matchIsFinished(m){return m?.status==='finished' || (m?.scoreHome!=null && m?.scoreAway!=null);}
+        function getMatchPhase(m){
+            if(matchIsFinished(m)) return 'finished';
+            const ts=matchTimestamp(m);
+            if(ts!=null && Date.now()>=ts) return 'live';
+            return 'upcoming';
+        }
+        function isLiveMatch(m){const ts=matchTimestamp(m); return !matchIsFinished(m) && ts!=null && Date.now()>=ts;}
+        function isMatchLive(m){ return isLiveMatch(m); }
+        async function showAppNotification(title,body,data={}){
+            if(!notificationSettings.enabled || Notification.permission!=='granted') return false;
+            try{
+                const reg=await navigator.serviceWorker?.ready;
+                if(reg && reg.showNotification){await reg.showNotification(title,{body,icon:'logo.png',badge:'logo.png',tag:data.tag||title,data});return true;}
+            }catch(e){}
+            try{new Notification(title,{body,icon:'logo.png'});return true;}catch(e){return false;}
+        }
+        async function enableNotifications(){
+            if(!('Notification' in window)){alert('Ta przeglądarka nie obsługuje powiadomień.');return;}
+            if(!window.isSecureContext){alert('Powiadomienia wymagają HTTPS.');return;}
+            try{
+                if(Notification.permission!=='granted'){
+                    const p=await Notification.requestPermission();
+                    if(p!=='granted'){renderNotificationSettings();return;}
+                }
+                notificationSettings.enabled=true; localStorage.setItem(NOTIFY_KEY,JSON.stringify(notificationSettings));
+                await registerAppServiceWorker();
+                renderNotificationSettings();
+                await showAppNotification('Strefa Gola','Powiadomienia są włączone.');
+            }catch(e){alert('Nie udało się włączyć powiadomień.');}
+        }
+        async function registerAppServiceWorker(){
+            if(!('serviceWorker' in navigator)) return null;
+            try{return await navigator.serviceWorker.register('service-worker.js',{scope:'./'});}catch(e){console.warn('Service worker:',e);return null;}
+        }
+        function saveNotificationSetting(key,val){notificationSettings[key]=!!val; localStorage.setItem(NOTIFY_KEY,JSON.stringify(notificationSettings));}
+        function renderNotificationSettings(){
+            ['before60','before15','start','result','news'].forEach(k=>{const id={'before60':'notify-60','before15':'notify-15','start':'notify-start','result':'notify-result','news':'notify-news'}[k];const el=document.getElementById(id);if(el) el.checked=!!notificationSettings[k];});
+            const s=document.getElementById('notify-status'); if(!s) return;
+            if(!('Notification' in window)){s.className='notify-status warn';s.textContent='Twoja przeglądarka nie obsługuje powiadomień.';return;}
+            if(!window.isSecureContext){s.className='notify-status warn';s.textContent='Powiadomienia wymagają HTTPS.';return;}
+            if(Notification.permission==='granted' && notificationSettings.enabled){s.className='notify-status';s.textContent='Powiadomienia są aktywne.';}
+            else if(Notification.permission==='denied'){s.className='notify-status warn';s.textContent='Powiadomienia są zablokowane w ustawieniach telefonu/przeglądarki.';}
+            else{s.className='notify-status warn';s.textContent='Naciśnij „Włącz”, aby zezwolić na powiadomienia.';}
+        }
+        async function sendTestNotification(){
+            if(!notificationSettings.enabled || Notification.permission!=='granted'){await enableNotifications(); return;}
+            await showAppNotification('Strefa Gola','To jest powiadomienie testowe.');
+        }
+        function notificationKey(prefix,m){return `${prefix}:${m.id||''}:${matchTimestamp(m)||0}`;}
+        async function checkMatchNotifications(){
+            if(!notificationSettings.enabled || Notification.permission!=='granted') return;
+            const now=Date.now();
+            for(const m of mc){
+                if(!isFavoriteClub(m.homeTeam)&&!isFavoriteClub(m.awayTeam)) continue;
+                const ts=matchTimestamp(m); if(!ts) continue;
+                const mins=(ts-now)/60000;
+                const phase=getMatchPhase(m);
+                if(notificationSettings.before60 && mins<=60 && mins>45) await notifyOnce(notificationKey('60',m),'Mecz za godzinę',`${m.homeTeam} – ${m.awayTeam}`);
+                if(notificationSettings.before15 && mins<=15 && mins>0) await notifyOnce(notificationKey('15',m),'Mecz za 15 minut',`${m.homeTeam} – ${m.awayTeam}`);
+                if(notificationSettings.start && phase==='live') await notifyOnce(notificationKey('start',m),'Mecz już trwa',`${m.homeTeam} – ${m.awayTeam}`);
+            }
+            const seenResults={};
+            for(const m of mc){
+                const scoreReady=matchIsFinished(m) && m.scoreHome!=null && m.scoreAway!=null;
+                if(scoreReady && (isFavoriteClub(m.homeTeam)||isFavoriteClub(m.awayTeam))){
+                    seenResults[m.id]=`${m.scoreHome}:${m.scoreAway}`;
+                    if(notificationSettings.result) await notifyOnce(notificationKey(`result:${seenResults[m.id]}`,m),'Wynik meczu',`${m.homeTeam} ${m.scoreHome}:${m.scoreAway} ${m.awayTeam}`);
+                }
+            }
+        }
+        async function notifyOnce(key,title,body){
+            let seen={};try{seen=JSON.parse(localStorage.getItem(NOTIFY_SEEN_KEY)||'{}');}catch(e){}
+            if(seen[key]) return;
+            seen[key]=Date.now();
+            const keys=Object.keys(seen); if(keys.length>400) keys.slice(0,keys.length-400).forEach(k=>delete seen[k]);
+            localStorage.setItem(NOTIFY_SEEN_KEY,JSON.stringify(seen));
+            await showAppNotification(title,body,{tag:key});
+        }
+        async function pollNewsNotifications(){
+            if(!notificationSettings.enabled || !notificationSettings.news || !window.db) return;
+            try{
+                const snap=await window.db.collection('posts').orderBy('date','desc').limit(5).get();
+                const fresh=snap.docs.map(d=>({id:d.id,...d.data()}));
+                if(latestPostsSnapshot.length){
+                    const old=new Set(latestPostsSnapshot.map(p=>p.id));
+                    for(const p of fresh.filter(p=>!old.has(p.id)).slice(0,3)) await notifyOnce('news-poll:'+p.id,'Nowa aktualność',p.title||'Nowy wpis');
+                }
+                latestPostsSnapshot=fresh;
+            }catch(e){}
+        }
+        function startNotificationLoop(){
+            clearInterval(notificationTimer);
+            notificationTimer=setInterval(()=>{
+                refreshMatches().then(()=>checkMatchNotifications()).catch(()=>{});
+                pollNewsNotifications().catch(()=>{});
+            },30000);
+            checkMatchNotifications().catch(()=>{});
+            pollNewsNotifications().catch(()=>{});
+        }
+
         let zonesCache={};
         let zonesLoaded=false;
         let zonesPromise=null;
@@ -1313,30 +1536,15 @@
         }
 
         let mc=[], curFilter='all', curMatchType='all';
-        function matchIsLive(m){
-            if(!m || m.status==='finished') return false;
-            if(m.status==='live' || m.live===true || m.isLive===true || m.status==='LIVE') return true;
-            if(!m.date || typeof m.date.seconds !== 'number') return false;
-            if(m.scoreHome!=null || m.scoreAway!=null) return false;
-            const start=m.date.seconds*1000;
-            const now=Date.now();
-            const durationMs=2*60*60*1000;
-            return now>=start && now<=start+durationMs;
-        }
-        function matchIsUpcoming(m){ return !matchIsLive(m) && (m.status==='upcoming' || (m.scoreHome==null||m.scoreAway==null)) && m.status!=='finished'; }
-        function upcomingList(list){ return list.filter(m=>matchIsUpcoming(m) || matchIsLive(m)).sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0)); }
-        function finishedList(list){ return list.filter(m=>!matchIsUpcoming(m) && !matchIsLive(m)).sort((a,b)=>(b.date?.seconds||0)-(a.date?.seconds||0)); }
+        function matchIsUpcoming(m){ return !matchIsFinished(m); }
+        function upcomingList(list){ return list.filter(matchIsUpcoming).sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0)); }
+        function finishedList(list){ return list.filter(m=>!matchIsUpcoming(m)).sort((a,b)=>(b.date?.seconds||0)-(a.date?.seconds||0)); }
 
         const DAYS=['niedziela','poniedziałek','wtorek','środa','czwartek','piątek','sobota'];
         function fmtUpcoming(ts){
             if(!ts) return 'Termin wkrótce';
             const d=new Date(ts.seconds*1000), pad=n=>String(n).padStart(2,'0');
             return `<i class="fa-regular fa-clock"></i> ${DAYS[d.getDay()]}, ${pad(d.getDate())}.${pad(d.getMonth()+1)} • ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-        }
-        function fmtKickoff(ts){
-            if(!ts) return 'godzina nieustalona';
-            const d=new Date(ts.seconds*1000), pad=n=>String(n).padStart(2,'0');
-            return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
         }
         function fmtFinished(ts){
             if(!ts) return '';
@@ -1347,35 +1555,75 @@
             const d=new Date(ts.seconds*1000), pad=n=>String(n).padStart(2,'0');
             return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
         }
+
+        async function readMatchesFromDB(dbase, dbLabel){
+            if(!dbase) return [];
+            try{
+                // Najpierw szybki odczyt bez orderBy — działa także wtedy, gdy część dokumentów nie ma pola date.
+                const snap=await dbase.collection('matches').limit(500).get();
+                return snap.docs.map(d=>({id:d.id,_db:dbLabel,...d.data()}));
+            }catch(primaryError){
+                // Awaryjnie próbujemy starszego sposobu sortowania po stronie Firestore.
+                try{
+                    const snap=await dbase.collection('matches').orderBy('date','asc').limit(500).get();
+                    return snap.docs.map(d=>({id:d.id,_db:dbLabel,...d.data()}));
+                }catch(fallbackError){
+                    console.warn('Nie udało się pobrać meczów:', primaryError, fallbackError);
+                    return [];
+                }
+            }
+        }
+
         async function refreshMatches(){
             const c1=document.getElementById('home-upcoming');
             if(!c1) return;
             try{
                 await loadCrests();
-                const reads=[window.db.collection('matches').orderBy('date','asc').limit(500).get()];
-                if(window.db2) reads.push(window.db2.collection('matches').orderBy('date','asc').limit(500).get().catch(()=>null));
-                const [s1,s2]=await Promise.all(reads);
-                let allM=s1.docs.map(d=>({id:d.id, _db:'db1', ...d.data()}));
-                if(s2) allM=allM.concat(s2.docs.map(d=>({id:d.id, _db:'db2', ...d.data()})));
-                allM.sort((a,b)=>(a.date?.seconds||0)-(b.date?.seconds||0));
+                const [db1Matches,db2Matches]=await Promise.all([
+                    readMatchesFromDB(window.db,'db1'),
+                    window.db2 ? readMatchesFromDB(window.db2,'db2') : Promise.resolve([])
+                ]);
+                let allM=db1Matches.concat(db2Matches);
+                allM.sort((a,b)=>matchTimestamp(a)-matchTimestamp(b));
+                if(!allM.length){
+                    throw new Error('Brak odczytanych meczów z Firebase.');
+                }
+                const previous={...notificationSnapshot};
+                allM.forEach(m=>{notificationSnapshot[m.id]={home:m.scoreHome,away:m.scoreAway,phase:getMatchPhase(m),ts:matchTimestamp(m)};});
+                if(notificationSettings.enabled && notificationSettings.result){
+                    for(const m of allM){
+                        const prev=previous[m.id];
+                        const ready=m.scoreHome!=null&&m.scoreAway!=null;
+                        if(prev && !((prev.home!=null&&prev.away!=null)) && ready && (isFavoriteClub(m.homeTeam)||isFavoriteClub(m.awayTeam))){
+                            await notifyOnce('result-live:'+m.id+':'+m.scoreHome+':'+m.scoreAway,'Wynik meczu',`${m.homeTeam} ${m.scoreHome}:${m.scoreAway} ${m.awayTeam}`);
+                        }
+                    }
+                }
                 mc = allM;
                 renderGrid(upcomingList(mc).slice(0,6),'home-upcoming');
                 renderGrid(finishedList(mc).slice(0,6),'home-grid');
                 applyFilter();
-            }catch(e){ c1.innerHTML='<p style="color:#ff6b6b;">Błąd bazy.</p>'; }
+            }catch(e){
+                console.error('Błąd ładowania meczów:',e);
+                c1.innerHTML='<p style="color:#ff6b6b;">Błąd bazy danych. Spróbuj ponownie.</p>';
+                const up=document.getElementById('upcoming-grid');
+                const res=document.getElementById('results-grid');
+                if(up) up.innerHTML='<p style="color:#ff6b6b;text-align:center;padding:1.5rem;">Nie udało się pobrać meczów.</p>';
+                if(res) res.innerHTML='';
+            }
         }
 
         function matchCard(m){
-            const live=matchIsLive(m);
             const up=matchIsUpcoming(m);
+            const live=isLiveMatch(m);
             return `<div class="card">
-                <div class="league-label"><i class="fa-solid fa-circle"></i>${L[m.league]||m.league}${live?'<span class="badge-up">NA ŻYWO</span>':(up?'<span class="badge-up">Nadchodzący</span>':'')}</div>
+                <div class="league-label"><i class="fa-solid fa-circle"></i>${L[m.league]||m.league}${live?'<span class="badge-up" style="color:#ff5f68;">NA ŻYWO</span>':up?'<span class="badge-up">Nadchodzący</span>':''}</div>
                 <div class="match-row">
-                    <div class="team-wrap">${crestImg(m.homeTeam)}<span class="team-name" onclick="openClubProfile('${m.homeTeam}')">${m.homeTeam||'?'}</span></div>
-                    <div class="score-box ${up?'vs':''}">${live?`${m.scoreHome??0}:${m.scoreAway??0}`:(up?'vs':`${m.scoreHome??'-'}:${m.scoreAway??'-'}`)}</div>
-                    <div class="team-wrap away"><span class="team-name" onclick="openClubProfile('${m.awayTeam}')">${m.awayTeam||'?'}</span>${crestImg(m.awayTeam)}</div>
+                    <div class="team-line">${crestImg(m.homeTeam)}<span class="team-name" onclick="event.stopPropagation();openClubProfile(${safeJsString(m.homeTeam||\'\')})">${m.homeTeam||'?'}</span><button class="favorite-star ${isFavoriteClub(m.homeTeam)?'is-favorite':''}" aria-label="${isFavoriteClub(m.homeTeam)?'Usuń z ulubionych':'Dodaj do ulubionych'}" onclick="event.stopPropagation();toggleFavoriteClub(${safeJsString(m.homeTeam||'')})"><i class="fa-${isFavoriteClub(m.homeTeam)?'solid':'regular'} fa-star"></i></button></div>
+                    <div class="score-box ${live?'vs':''}">${live?'<span class="live-badge">Na żywo</span>':(up?'vs':`${m.scoreHome??'-'}:${m.scoreAway??'-'}`)}</div>
+                    <div class="team-line away"><button class="favorite-star ${isFavoriteClub(m.awayTeam)?'is-favorite':''}" aria-label="${isFavoriteClub(m.awayTeam)?'Usuń z ulubionych':'Dodaj do ulubionych'}" onclick="event.stopPropagation();toggleFavoriteClub(${safeJsString(m.awayTeam||'')})"><i class="fa-${isFavoriteClub(m.awayTeam)?'solid':'regular'} fa-star"></i></button><span class="team-name" onclick="event.stopPropagation();openClubProfile(${safeJsString(m.awayTeam||\'\')})">${m.awayTeam||'?'}</span>${crestImg(m.awayTeam)}</div>
                 </div>
-                <div class="match-date ${up||live?'up':''}">${live?'<span style="color:#ff3d57;font-weight:700;">● NA ŻYWO</span> · start ${fmtKickoff(m.date)}':(up?fmtUpcoming(m.date):fmtFinished(m.date))}</div>
+                <div class="match-date ${up?'up':''}">${up?fmtUpcoming(m.date):fmtFinished(m.date)}</div>
             </div>`;
         }
 
@@ -1610,25 +1858,39 @@
             });
         }
 
-        function renderHomePosts(){
-            const c=document.getElementById('home-posts-grid');
+        async function loadHomePosts(){
+            const c=document.getElementById('home-posts');
             if(!c) return;
-            const list=postsCache.slice(0,3);
-            c.innerHTML=list.length ? list.map((p,idx)=>`<div class="card" onclick="go('posts');setTimeout(()=>openPostModal(${idx}),60)" style="cursor:pointer;">
-                <div class="league-label"><i class="fa-solid fa-bullhorn"></i> ${p.label||'Informacja'}</div>
-                <h3 style="font-size:.88rem;margin-bottom:.45rem;color:#f3f6fb;">${p.title}</h3>
-                <p style="color:#8995a7;font-size:.69rem;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${parseLinks(p.content)}</p>
-                <div style="margin-top:8px;font-size:.61rem;color:#91dc45;">Czytaj więcej →</div>
-            </div>`).join('') : '<p style="color:#7f8b9d;padding:8px 0;">Brak aktualności.</p>';
+            try{
+                const s=await window.db.collection('posts').orderBy('date','desc').limit(3).get();
+                if(s.empty){
+                    c.innerHTML='<p style="color:var(--muted);padding:1rem;">Brak aktualności.</p>';
+                    return;
+                }
+                const items=s.docs.map(d=>({id:d.id,...d.data()}));
+                c.innerHTML=items.map((p,idx)=>`<div class="card" onclick="openPostModal(${idx})" style="cursor:pointer;">
+                    <div class="league-label"><i class="fa-solid fa-bullhorn"></i> ${p.label||'Informacja'}</div>
+                    <h3 style="font-size:1rem;margin-bottom:.45rem;color:var(--white);">${p.title||'Aktualność'}</h3>
+                    <p style="color:var(--muted);font-size:.8rem;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${parseLinks(p.content||'')}</p>
+                    <div class="match-date" style="text-align:left;margin-top:.8rem;"><i class="fa-regular fa-clock"></i> ${fmtFinished(p.date)}</div>
+                </div>`).join('');
+            }catch(e){
+                c.innerHTML='<p style="color:#ff6b6b;padding:1rem;">Błąd ładowania aktualności.</p>';
+            }
         }
 
         async function loadPosts(){
             const c=document.getElementById('posts-grid');
             try{
                 const s=await window.db.collection('posts').orderBy('date','desc').limit(20).get();
-                if(s.empty){c.innerHTML='<p style="color:var(--muted);padding:2rem;">Brak postów.</p>';postsCache=[];renderHomePosts();return;}
-                postsCache = s.docs.map(d=>({id:d.id, ...d.data()}));
-                renderHomePosts();
+                if(s.empty){c.innerHTML='<p style="color:var(--muted);padding:2rem;">Brak postów.</p>';return;}
+                const freshPosts = s.docs.map(d=>({id:d.id, ...d.data()}));
+                if(latestPostsSnapshot.length && notificationSettings.enabled && notificationSettings.news){
+                    const oldIds=new Set(latestPostsSnapshot.map(p=>p.id));
+                    for(const p of freshPosts.filter(p=>!oldIds.has(p.id)).slice(0,3)){ await notifyOnce('news:'+p.id,'Nowa aktualność',p.title||'Nowy wpis'); }
+                }
+                latestPostsSnapshot=freshPosts;
+                postsCache = freshPosts;
                 
                 c.innerHTML=postsCache.map((p, idx)=>{
                     return `<div class="card" onclick="openPostModal(${idx})" style="cursor:pointer;">
@@ -1663,44 +1925,9 @@
             document.getElementById('post-modal').classList.remove('active');
         }
 
-        let currentFavoriteTeam = '';
-        const FAVORITE_TEAM_KEY = 'strefagola_favorite_team';
-
-        function getFavoriteTeam(){
-            try { return localStorage.getItem(FAVORITE_TEAM_KEY) || ''; } catch(e) { return ''; }
-        }
-
-        function setFavoriteButton(teamName){
-            const btn = document.getElementById('favorite-team-btn');
-            if(!btn) return;
-            const fav = getFavoriteTeam().trim().toLowerCase() === (teamName || '').trim().toLowerCase();
-            btn.innerHTML = fav
-                ? '<i class="fa-solid fa-star"></i><span>Ulubiona drużyna</span>'
-                : '<i class="fa-regular fa-star"></i><span>Dodaj do ulubionych</span>';
-            btn.style.color = fav ? 'var(--green)' : 'var(--muted)';
-            btn.style.borderColor = fav ? 'rgba(126,211,33,.45)' : 'var(--border)';
-            btn.style.background = fav ? 'rgba(126,211,33,.10)' : 'transparent';
-        }
-
-        function toggleFavoriteTeam(){
-            const teamName = currentFavoriteTeam.trim();
-            if(!teamName) return;
-            try {
-                const current = getFavoriteTeam().trim().toLowerCase();
-                if(current === teamName.toLowerCase()) {
-                    localStorage.removeItem(FAVORITE_TEAM_KEY);
-                } else {
-                    localStorage.setItem(FAVORITE_TEAM_KEY, teamName);
-                }
-            } catch(e) {}
-            setFavoriteButton(teamName);
-        }
-
         function openClubProfile(teamName) {
             if(!teamName) return;
-            currentFavoriteTeam = teamName;
             const modal = document.getElementById('club-modal');
-            setFavoriteButton(teamName);
             const c = crestsCache[teamName.trim()];
             
             document.getElementById('modal-crest-container').innerHTML = c 
@@ -2230,10 +2457,11 @@
         // Ładuj ekran Start od razu po uruchomieniu aplikacji.
         // Nie zmienia to działania funkcji — tylko wywołuje istniejące ładowanie
         // równolegle bez konieczności przechodzenia do innej zakładki.
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
+            loadLocalPreferences();
             refreshMatches();
             loadHomeTable();
-            loadPosts();
+            loadHomePosts();
         });
         
     </script>
