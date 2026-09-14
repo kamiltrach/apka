@@ -662,7 +662,7 @@
                 gap:0;
             }
             .bottom-tab{
-                flex:1 1 14.28%;
+                flex:1 1 12.5%;
                 min-width:0;
                 max-width:90px;
                 padding-left:2px;
@@ -730,6 +730,7 @@
         <button class="bottom-tab" data-section="stats" onclick="go('stats')"><i class="fa-solid fa-chart-simple"></i><span>Statystyki</span></button>
         <button class="bottom-tab" data-section="transfers" onclick="go('transfers')"><i class="fa-solid fa-right-left"></i><span>Transfery</span></button>
         <button class="bottom-tab" data-section="posts" onclick="go('posts')"><i class="fa-solid fa-newspaper"></i><span>Aktualności</span></button>
+        <button class="bottom-tab" data-section="settings" onclick="go('settings')"><i class="fa-solid fa-gear"></i><span>Ustawienia</span></button>
     </div>
 
     <main>
@@ -814,11 +815,34 @@
                     <button class="sub-tab" onclick="filterM('a_przeworsk',this)">A Klasa Przeworsk</button>
                     <button class="sub-tab" onclick="filterM('a_jaroslaw',this)">A Klasa Jarosław</button>
                     <button class="sub-tab" onclick="filterM('a_rzeszow',this)">A Klasa Rzeszów</button>
+                    <button class="sub-tab" onclick="filterM('a_debica',this)">A Klasa Dębica</button>
+                    <button class="sub-tab" onclick="filterM('a_krosno_1',this)">A Klasa Krosno I</button>
+                    <button class="sub-tab" onclick="filterM('a_krosno_2',this)">A Klasa Krosno II</button>
+                    <button class="sub-tab" onclick="filterM('a_krosno_3',this)">A Klasa Krosno III</button>
+                    <button class="sub-tab" onclick="filterM('a_lancut',this)">A Klasa Łańcut</button>
+                    <button class="sub-tab" onclick="filterM('a_mielec',this)">A Klasa Mielec</button>
+                    <button class="sub-tab" onclick="filterM('a_stalowa_1',this)">A Klasa Stalowa Wola I</button>
+                    <button class="sub-tab" onclick="filterM('a_stalowa_2',this)">A Klasa Stalowa Wola II</button>
                 </div>
                 <div class="sub-nav grp-b" style="display:none;">
                     <button class="sub-tab" onclick="filterM('b_przeworsk',this)">B Klasa Przeworsk</button>
                     <button class="sub-tab" onclick="filterM('b_jaroslaw',this)">B Klasa Jarosław</button>
                     <button class="sub-tab" onclick="filterM('b_rzeszow',this)">B Klasa Rzeszów</button>
+                    <button class="sub-tab" onclick="filterM('b_debica_1',this)">B Klasa Dębica I</button>
+                    <button class="sub-tab" onclick="filterM('b_debica_2',this)">B Klasa Dębica II</button>
+                    <button class="sub-tab" onclick="filterM('b_krosno_1',this)">B Klasa Krosno I</button>
+                    <button class="sub-tab" onclick="filterM('b_krosno_2',this)">B Klasa Krosno II</button>
+                    <button class="sub-tab" onclick="filterM('b_krosno_3',this)">B Klasa Krosno III</button>
+                    <button class="sub-tab" onclick="filterM('b_krosno_4',this)">B Klasa Krosno IV</button>
+                    <button class="sub-tab" onclick="filterM('b_krosno_5',this)">B Klasa Krosno V</button>
+                    <button class="sub-tab" onclick="filterM('b_lancut_1',this)">B Klasa Łańcut I</button>
+                    <button class="sub-tab" onclick="filterM('b_lancut_2',this)">B Klasa Łańcut II</button>
+                    <button class="sub-tab" onclick="filterM('b_mielec_1',this)">B Klasa Mielec I</button>
+                    <button class="sub-tab" onclick="filterM('b_mielec_2',this)">B Klasa Mielec II</button>
+                    <button class="sub-tab" onclick="filterM('b_kolbuszowa',this)">B Klasa Kolbuszowa</button>
+                    <button class="sub-tab" onclick="filterM('b_stalowa_1',this)">B Klasa Stalowa Wola I</button>
+                    <button class="sub-tab" onclick="filterM('b_stalowa_2',this)">B Klasa Stalowa Wola II</button>
+                    <button class="sub-tab" onclick="filterM('b_stalowa_3',this)">B Klasa Stalowa Wola III</button>
                 </div>
             </div>
 
@@ -854,11 +878,34 @@
                     <button class="sub-tab" onclick="loadTable('a_przeworsk',this)">A Klasa Przeworsk</button>
                     <button class="sub-tab" onclick="loadTable('a_jaroslaw',this)">A Klasa Jarosław</button>
                     <button class="sub-tab" onclick="loadTable('a_rzeszow',this)">A Klasa Rzeszów</button>
+                    <button class="sub-tab" onclick="loadTable('a_debica',this)">A Klasa Dębica</button>
+                    <button class="sub-tab" onclick="loadTable('a_krosno_1',this)">A Klasa Krosno I</button>
+                    <button class="sub-tab" onclick="loadTable('a_krosno_2',this)">A Klasa Krosno II</button>
+                    <button class="sub-tab" onclick="loadTable('a_krosno_3',this)">A Klasa Krosno III</button>
+                    <button class="sub-tab" onclick="loadTable('a_lancut',this)">A Klasa Łańcut</button>
+                    <button class="sub-tab" onclick="loadTable('a_mielec',this)">A Klasa Mielec</button>
+                    <button class="sub-tab" onclick="loadTable('a_stalowa_1',this)">A Klasa Stalowa Wola I</button>
+                    <button class="sub-tab" onclick="loadTable('a_stalowa_2',this)">A Klasa Stalowa Wola II</button>
                 </div>
                 <div class="sub-nav grp-b" style="display:none;">
                     <button class="sub-tab" onclick="loadTable('b_przeworsk',this)">B Klasa Przeworsk</button>
                     <button class="sub-tab" onclick="loadTable('b_jaroslaw',this)">B Klasa Jarosław</button>
                     <button class="sub-tab" onclick="loadTable('b_rzeszow',this)">B Klasa Rzeszów</button>
+                    <button class="sub-tab" onclick="loadTable('b_debica_1',this)">B Klasa Dębica I</button>
+                    <button class="sub-tab" onclick="loadTable('b_debica_2',this)">B Klasa Dębica II</button>
+                    <button class="sub-tab" onclick="loadTable('b_krosno_1',this)">B Klasa Krosno I</button>
+                    <button class="sub-tab" onclick="loadTable('b_krosno_2',this)">B Klasa Krosno II</button>
+                    <button class="sub-tab" onclick="loadTable('b_krosno_3',this)">B Klasa Krosno III</button>
+                    <button class="sub-tab" onclick="loadTable('b_krosno_4',this)">B Klasa Krosno IV</button>
+                    <button class="sub-tab" onclick="loadTable('b_krosno_5',this)">B Klasa Krosno V</button>
+                    <button class="sub-tab" onclick="loadTable('b_lancut_1',this)">B Klasa Łańcut I</button>
+                    <button class="sub-tab" onclick="loadTable('b_lancut_2',this)">B Klasa Łańcut II</button>
+                    <button class="sub-tab" onclick="loadTable('b_mielec_1',this)">B Klasa Mielec I</button>
+                    <button class="sub-tab" onclick="loadTable('b_mielec_2',this)">B Klasa Mielec II</button>
+                    <button class="sub-tab" onclick="loadTable('b_kolbuszowa',this)">B Klasa Kolbuszowa</button>
+                    <button class="sub-tab" onclick="loadTable('b_stalowa_1',this)">B Klasa Stalowa Wola I</button>
+                    <button class="sub-tab" onclick="loadTable('b_stalowa_2',this)">B Klasa Stalowa Wola II</button>
+                    <button class="sub-tab" onclick="loadTable('b_stalowa_3',this)">B Klasa Stalowa Wola III</button>
                 </div>
             </div>
             <div class="table-container anim d1">
@@ -888,11 +935,34 @@
                     <button class="sub-tab" onclick="loadStats('a_przeworsk',this)">A Klasa Przeworsk</button>
                     <button class="sub-tab" onclick="loadStats('a_jaroslaw',this)">A Klasa Jarosław</button>
                     <button class="sub-tab" onclick="loadStats('a_rzeszow',this)">A Klasa Rzeszów</button>
+                    <button class="sub-tab" onclick="loadStats('a_debica',this)">A Klasa Dębica</button>
+                    <button class="sub-tab" onclick="loadStats('a_krosno_1',this)">A Klasa Krosno I</button>
+                    <button class="sub-tab" onclick="loadStats('a_krosno_2',this)">A Klasa Krosno II</button>
+                    <button class="sub-tab" onclick="loadStats('a_krosno_3',this)">A Klasa Krosno III</button>
+                    <button class="sub-tab" onclick="loadStats('a_lancut',this)">A Klasa Łańcut</button>
+                    <button class="sub-tab" onclick="loadStats('a_mielec',this)">A Klasa Mielec</button>
+                    <button class="sub-tab" onclick="loadStats('a_stalowa_1',this)">A Klasa Stalowa Wola I</button>
+                    <button class="sub-tab" onclick="loadStats('a_stalowa_2',this)">A Klasa Stalowa Wola II</button>
                 </div>
                 <div class="sub-nav grp-b" style="display:none;">
                     <button class="sub-tab" onclick="loadStats('b_przeworsk',this)">B Klasa Przeworsk</button>
                     <button class="sub-tab" onclick="loadStats('b_jaroslaw',this)">B Klasa Jarosław</button>
                     <button class="sub-tab" onclick="loadStats('b_rzeszow',this)">B Klasa Rzeszów</button>
+                    <button class="sub-tab" onclick="loadStats('b_debica_1',this)">B Klasa Dębica I</button>
+                    <button class="sub-tab" onclick="loadStats('b_debica_2',this)">B Klasa Dębica II</button>
+                    <button class="sub-tab" onclick="loadStats('b_krosno_1',this)">B Klasa Krosno I</button>
+                    <button class="sub-tab" onclick="loadStats('b_krosno_2',this)">B Klasa Krosno II</button>
+                    <button class="sub-tab" onclick="loadStats('b_krosno_3',this)">B Klasa Krosno III</button>
+                    <button class="sub-tab" onclick="loadStats('b_krosno_4',this)">B Klasa Krosno IV</button>
+                    <button class="sub-tab" onclick="loadStats('b_krosno_5',this)">B Klasa Krosno V</button>
+                    <button class="sub-tab" onclick="loadStats('b_lancut_1',this)">B Klasa Łańcut I</button>
+                    <button class="sub-tab" onclick="loadStats('b_lancut_2',this)">B Klasa Łańcut II</button>
+                    <button class="sub-tab" onclick="loadStats('b_mielec_1',this)">B Klasa Mielec I</button>
+                    <button class="sub-tab" onclick="loadStats('b_mielec_2',this)">B Klasa Mielec II</button>
+                    <button class="sub-tab" onclick="loadStats('b_kolbuszowa',this)">B Klasa Kolbuszowa</button>
+                    <button class="sub-tab" onclick="loadStats('b_stalowa_1',this)">B Klasa Stalowa Wola I</button>
+                    <button class="sub-tab" onclick="loadStats('b_stalowa_2',this)">B Klasa Stalowa Wola II</button>
+                    <button class="sub-tab" onclick="loadStats('b_stalowa_3',this)">B Klasa Stalowa Wola III</button>
                 </div>
             </div>
 
@@ -931,11 +1001,34 @@
                     <button class="sub-tab" onclick="filterTransfers('a_przeworsk',this)">A Klasa Przeworsk</button>
                     <button class="sub-tab" onclick="filterTransfers('a_jaroslaw',this)">A Klasa Jarosław</button>
                     <button class="sub-tab" onclick="filterTransfers('a_rzeszow',this)">A Klasa Rzeszów</button>
+                    <button class="sub-tab" onclick="filterTransfers('a_debica',this)">A Klasa Dębica</button>
+                    <button class="sub-tab" onclick="filterTransfers('a_krosno_1',this)">A Klasa Krosno I</button>
+                    <button class="sub-tab" onclick="filterTransfers('a_krosno_2',this)">A Klasa Krosno II</button>
+                    <button class="sub-tab" onclick="filterTransfers('a_krosno_3',this)">A Klasa Krosno III</button>
+                    <button class="sub-tab" onclick="filterTransfers('a_lancut',this)">A Klasa Łańcut</button>
+                    <button class="sub-tab" onclick="filterTransfers('a_mielec',this)">A Klasa Mielec</button>
+                    <button class="sub-tab" onclick="filterTransfers('a_stalowa_1',this)">A Klasa Stalowa Wola I</button>
+                    <button class="sub-tab" onclick="filterTransfers('a_stalowa_2',this)">A Klasa Stalowa Wola II</button>
                 </div>
                 <div class="sub-nav grp-b" style="display:none;">
                     <button class="sub-tab" onclick="filterTransfers('b_przeworsk',this)">B Klasa Przeworsk</button>
                     <button class="sub-tab" onclick="filterTransfers('b_jaroslaw',this)">B Klasa Jarosław</button>
                     <button class="sub-tab" onclick="filterTransfers('b_rzeszow',this)">B Klasa Rzeszów</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_debica_1',this)">B Klasa Dębica I</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_debica_2',this)">B Klasa Dębica II</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_krosno_1',this)">B Klasa Krosno I</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_krosno_2',this)">B Klasa Krosno II</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_krosno_3',this)">B Klasa Krosno III</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_krosno_4',this)">B Klasa Krosno IV</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_krosno_5',this)">B Klasa Krosno V</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_lancut_1',this)">B Klasa Łańcut I</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_lancut_2',this)">B Klasa Łańcut II</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_mielec_1',this)">B Klasa Mielec I</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_mielec_2',this)">B Klasa Mielec II</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_kolbuszowa',this)">B Klasa Kolbuszowa</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_stalowa_1',this)">B Klasa Stalowa Wola I</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_stalowa_2',this)">B Klasa Stalowa Wola II</button>
+                    <button class="sub-tab" onclick="filterTransfers('b_stalowa_3',this)">B Klasa Stalowa Wola III</button>
                 </div>
             </div>
             <h2 style="margin-bottom:2rem;text-transform:uppercase;letter-spacing:1.2px;font-size:0.82rem;color:var(--muted);" class="anim">Rynek Transferowy</h2>
@@ -957,6 +1050,26 @@
                 <p>Najważniejsze komunikaty, ogłoszenia i informacje od redakcji.</p>
             </div>
             <div id="posts-grid" class="grid anim d1"></div>
+        </section>
+
+        <section id="settings" class="section">
+            <div class="hero anim" style="padding:16px 4px 14px;">
+                <h1 style="font-size:1.7rem;">Ustawienia <span>aplikacji</span></h1>
+                <p>Dostosuj powiadomienia i zachowanie aplikacji.</p>
+            </div>
+            <div class="card anim d1">
+                <div class="league-label"><i class="fa-solid fa-bell"></i> Powiadomienia</div>
+                <div id="notify-status" class="notify-status warn">Ładowanie ustawień powiadomień...</div>
+                <button class="btn" type="button" onclick="enableNotifications()"><i class="fa-solid fa-bell"></i> Włącz powiadomienia</button>
+                <button class="btn-sm" type="button" onclick="sendTestNotification()" style="margin-top:8px;width:100%;border:1px solid rgba(255,255,255,.08);">Wyślij testowe powiadomienie</button>
+                <div class="settings-list" style="margin-top:12px;">
+                    <div class="setting-row"><div><h3>60 minut przed meczem</h3><p>Przypomnienie o meczu ulubionej drużyny.</p></div><label class="switch"><input id="notify-60" type="checkbox" onchange="saveNotificationSetting('before60',this.checked)"><span class="slider"></span></label></div>
+                    <div class="setting-row"><div><h3>15 minut przed meczem</h3><p>Drugie przypomnienie przed rozpoczęciem spotkania.</p></div><label class="switch"><input id="notify-15" type="checkbox" onchange="saveNotificationSetting('before15',this.checked)"><span class="slider"></span></label></div>
+                    <div class="setting-row"><div><h3>Start meczu</h3><p>Powiadomienie w chwili rozpoczęcia spotkania.</p></div><label class="switch"><input id="notify-start" type="checkbox" onchange="saveNotificationSetting('start',this.checked)"><span class="slider"></span></label></div>
+                    <div class="setting-row"><div><h3>Wynik meczu</h3><p>Informacja o zakończeniu spotkania i wyniku.</p></div><label class="switch"><input id="notify-result" type="checkbox" onchange="saveNotificationSetting('result',this.checked)"><span class="slider"></span></label></div>
+                    <div class="setting-row"><div><h3>Nowe aktualności</h3><p>Powiadomienia o nowych postach redakcji.</p></div><label class="switch"><input id="notify-news" type="checkbox" onchange="saveNotificationSetting('news',this.checked)"><span class="slider"></span></label></div>
+                </div>
+            </div>
         </section>
 
         <section id="favorites" class="section">
@@ -1045,7 +1158,30 @@
                                     <option value="a_jaroslaw">A Klasa Jarosław</option>
                                     <option value="b_jaroslaw">B Klasa Jarosław</option>
                                     <option value="a_rzeszow">A Klasa Rzeszów</option>
+                                    <option value="a_debica">A Klasa Dębica</option>
+                                    <option value="a_krosno_1">A Klasa Krosno I</option>
+                                    <option value="a_krosno_2">A Klasa Krosno II</option>
+                                    <option value="a_krosno_3">A Klasa Krosno III</option>
+                                    <option value="a_lancut">A Klasa Łańcut</option>
+                                    <option value="a_mielec">A Klasa Mielec</option>
+                                    <option value="a_stalowa_1">A Klasa Stalowa Wola I</option>
+                                    <option value="a_stalowa_2">A Klasa Stalowa Wola II</option>
                                     <option value="b_rzeszow">B Klasa Rzeszów</option>
+                                    <option value="b_debica_1">B Klasa Dębica I</option>
+                                    <option value="b_debica_2">B Klasa Dębica II</option>
+                                    <option value="b_krosno_1">B Klasa Krosno I</option>
+                                    <option value="b_krosno_2">B Klasa Krosno II</option>
+                                    <option value="b_krosno_3">B Klasa Krosno III</option>
+                                    <option value="b_krosno_4">B Klasa Krosno IV</option>
+                                    <option value="b_krosno_5">B Klasa Krosno V</option>
+                                    <option value="b_lancut_1">B Klasa Łańcut I</option>
+                                    <option value="b_lancut_2">B Klasa Łańcut II</option>
+                                    <option value="b_mielec_1">B Klasa Mielec I</option>
+                                    <option value="b_mielec_2">B Klasa Mielec II</option>
+                                    <option value="b_kolbuszowa">B Klasa Kolbuszowa</option>
+                                    <option value="b_stalowa_1">B Klasa Stalowa Wola I</option>
+                                    <option value="b_stalowa_2">B Klasa Stalowa Wola II</option>
+                                    <option value="b_stalowa_3">B Klasa Stalowa Wola III</option>
                                 </select>
                             </div>
                             <div class="form-grid">
@@ -1078,7 +1214,30 @@
                                     <option value="a_jaroslaw">A Klasa Jarosław</option>
                                     <option value="b_jaroslaw">B Klasa Jarosław</option>
                                     <option value="a_rzeszow">A Klasa Rzeszów</option>
+                                    <option value="a_debica">A Klasa Dębica</option>
+                                    <option value="a_krosno_1">A Klasa Krosno I</option>
+                                    <option value="a_krosno_2">A Klasa Krosno II</option>
+                                    <option value="a_krosno_3">A Klasa Krosno III</option>
+                                    <option value="a_lancut">A Klasa Łańcut</option>
+                                    <option value="a_mielec">A Klasa Mielec</option>
+                                    <option value="a_stalowa_1">A Klasa Stalowa Wola I</option>
+                                    <option value="a_stalowa_2">A Klasa Stalowa Wola II</option>
                                     <option value="b_rzeszow">B Klasa Rzeszów</option>
+                                    <option value="b_debica_1">B Klasa Dębica I</option>
+                                    <option value="b_debica_2">B Klasa Dębica II</option>
+                                    <option value="b_krosno_1">B Klasa Krosno I</option>
+                                    <option value="b_krosno_2">B Klasa Krosno II</option>
+                                    <option value="b_krosno_3">B Klasa Krosno III</option>
+                                    <option value="b_krosno_4">B Klasa Krosno IV</option>
+                                    <option value="b_krosno_5">B Klasa Krosno V</option>
+                                    <option value="b_lancut_1">B Klasa Łańcut I</option>
+                                    <option value="b_lancut_2">B Klasa Łańcut II</option>
+                                    <option value="b_mielec_1">B Klasa Mielec I</option>
+                                    <option value="b_mielec_2">B Klasa Mielec II</option>
+                                    <option value="b_kolbuszowa">B Klasa Kolbuszowa</option>
+                                    <option value="b_stalowa_1">B Klasa Stalowa Wola I</option>
+                                    <option value="b_stalowa_2">B Klasa Stalowa Wola II</option>
+                                    <option value="b_stalowa_3">B Klasa Stalowa Wola III</option>
                                 </select>
                             </div>
                             <input type="text" id="t-crest" placeholder="URL herbu (np. https://.../herb.png)">
@@ -1116,7 +1275,30 @@
                                     <option value="a_jaroslaw">A Klasa Jarosław</option>
                                     <option value="b_jaroslaw">B Klasa Jarosław</option>
                                     <option value="a_rzeszow">A Klasa Rzeszów</option>
+                                    <option value="a_debica">A Klasa Dębica</option>
+                                    <option value="a_krosno_1">A Klasa Krosno I</option>
+                                    <option value="a_krosno_2">A Klasa Krosno II</option>
+                                    <option value="a_krosno_3">A Klasa Krosno III</option>
+                                    <option value="a_lancut">A Klasa Łańcut</option>
+                                    <option value="a_mielec">A Klasa Mielec</option>
+                                    <option value="a_stalowa_1">A Klasa Stalowa Wola I</option>
+                                    <option value="a_stalowa_2">A Klasa Stalowa Wola II</option>
                                     <option value="b_rzeszow">B Klasa Rzeszów</option>
+                                    <option value="b_debica_1">B Klasa Dębica I</option>
+                                    <option value="b_debica_2">B Klasa Dębica II</option>
+                                    <option value="b_krosno_1">B Klasa Krosno I</option>
+                                    <option value="b_krosno_2">B Klasa Krosno II</option>
+                                    <option value="b_krosno_3">B Klasa Krosno III</option>
+                                    <option value="b_krosno_4">B Klasa Krosno IV</option>
+                                    <option value="b_krosno_5">B Klasa Krosno V</option>
+                                    <option value="b_lancut_1">B Klasa Łańcut I</option>
+                                    <option value="b_lancut_2">B Klasa Łańcut II</option>
+                                    <option value="b_mielec_1">B Klasa Mielec I</option>
+                                    <option value="b_mielec_2">B Klasa Mielec II</option>
+                                    <option value="b_kolbuszowa">B Klasa Kolbuszowa</option>
+                                    <option value="b_stalowa_1">B Klasa Stalowa Wola I</option>
+                                    <option value="b_stalowa_2">B Klasa Stalowa Wola II</option>
+                                    <option value="b_stalowa_3">B Klasa Stalowa Wola III</option>
                                 </select>
                             </div>
                             <div class="form-grid">
@@ -1149,7 +1331,30 @@
                                     <option value="a_jaroslaw">A Klasa Jarosław</option>
                                     <option value="b_jaroslaw">B Klasa Jarosław</option>
                                     <option value="a_rzeszow">A Klasa Rzeszów</option>
+                                    <option value="a_debica">A Klasa Dębica</option>
+                                    <option value="a_krosno_1">A Klasa Krosno I</option>
+                                    <option value="a_krosno_2">A Klasa Krosno II</option>
+                                    <option value="a_krosno_3">A Klasa Krosno III</option>
+                                    <option value="a_lancut">A Klasa Łańcut</option>
+                                    <option value="a_mielec">A Klasa Mielec</option>
+                                    <option value="a_stalowa_1">A Klasa Stalowa Wola I</option>
+                                    <option value="a_stalowa_2">A Klasa Stalowa Wola II</option>
                                     <option value="b_rzeszow">B Klasa Rzeszów</option>
+                                    <option value="b_debica_1">B Klasa Dębica I</option>
+                                    <option value="b_debica_2">B Klasa Dębica II</option>
+                                    <option value="b_krosno_1">B Klasa Krosno I</option>
+                                    <option value="b_krosno_2">B Klasa Krosno II</option>
+                                    <option value="b_krosno_3">B Klasa Krosno III</option>
+                                    <option value="b_krosno_4">B Klasa Krosno IV</option>
+                                    <option value="b_krosno_5">B Klasa Krosno V</option>
+                                    <option value="b_lancut_1">B Klasa Łańcut I</option>
+                                    <option value="b_lancut_2">B Klasa Łańcut II</option>
+                                    <option value="b_mielec_1">B Klasa Mielec I</option>
+                                    <option value="b_mielec_2">B Klasa Mielec II</option>
+                                    <option value="b_kolbuszowa">B Klasa Kolbuszowa</option>
+                                    <option value="b_stalowa_1">B Klasa Stalowa Wola I</option>
+                                    <option value="b_stalowa_2">B Klasa Stalowa Wola II</option>
+                                    <option value="b_stalowa_3">B Klasa Stalowa Wola III</option>
                                 </select>
                             </div>
                             <div class="form-grid-3">
@@ -1269,14 +1474,25 @@
             iv_liga:'IV Liga Podkarpacka', okr_jaroslaw:'Klasa Okręgowa Jarosław',
             okr_krosno:'Klasa Okręgowa Krosno', okr_rzeszow:'Klasa Okręgowa Rzeszów',
             okr_debica:'Klasa Okręgowa Dębica', okr_stalowa:'Klasa Okręgowa Stalowa Wola',
-            a_przeworsk:'A Klasa Przeworsk', b_przeworsk:'B Klasa Przeworsk',
-            a_jaroslaw:'A Klasa Jarosław', b_jaroslaw:'B Klasa Jarosław',
-            a_rzeszow:'A Klasa Rzeszów', b_rzeszow:'B Klasa Rzeszów'
+            a_przeworsk:'A Klasa Przeworsk', a_jaroslaw:'A Klasa Jarosław', a_rzeszow:'A Klasa Rzeszów',
+            a_debica:'A Klasa Dębica', a_krosno_1:'A Klasa Krosno I', a_krosno_2:'A Klasa Krosno II', a_krosno_3:'A Klasa Krosno III',
+            a_lancut:'A Klasa Łańcut', a_mielec:'A Klasa Mielec', a_stalowa_1:'A Klasa Stalowa Wola I', a_stalowa_2:'A Klasa Stalowa Wola II',
+            b_przeworsk:'B Klasa Przeworsk', b_jaroslaw:'B Klasa Jarosław', b_rzeszow:'B Klasa Rzeszów',
+            b_debica_1:'B Klasa Dębica I', b_debica_2:'B Klasa Dębica II',
+            b_krosno_1:'B Klasa Krosno I', b_krosno_2:'B Klasa Krosno II', b_krosno_3:'B Klasa Krosno III', b_krosno_4:'B Klasa Krosno IV', b_krosno_5:'B Klasa Krosno V',
+            b_lancut_1:'B Klasa Łańcut I', b_lancut_2:'B Klasa Łańcut II', b_mielec_1:'B Klasa Mielec I', b_mielec_2:'B Klasa Mielec II',
+            b_kolbuszowa:'B Klasa Kolbuszowa', b_stalowa_1:'B Klasa Stalowa Wola I', b_stalowa_2:'B Klasa Stalowa Wola II', b_stalowa_3:'B Klasa Stalowa Wola III'
         };
-        
-        const NEW_LEAGUES = ['a_przeworsk', 'b_przeworsk', 'a_jaroslaw', 'b_jaroslaw', 'a_rzeszow', 'b_rzeszow'];
+
+        // Te trzy istniejące A Klasy pozostają w db2 zgodnie z dotychczasową konfiguracją.
+        const DB2_LEAGUES = [
+            'a_przeworsk','a_jaroslaw','a_rzeszow',
+            'b_przeworsk','b_jaroslaw','b_rzeszow',
+            'b_debica_1','b_debica_2','b_krosno_1','b_krosno_2','b_krosno_3','b_krosno_4','b_krosno_5',
+            'b_lancut_1','b_lancut_2','b_mielec_1','b_mielec_2','b_kolbuszowa','b_stalowa_1','b_stalowa_2','b_stalowa_3'
+        ];
         function getDB(league) {
-            if(league && NEW_LEAGUES.includes(league) && window.db2) return window.db2;
+            if(league && DB2_LEAGUES.includes(league) && window.db2) return window.db2;
             return window.db;
         }
 
